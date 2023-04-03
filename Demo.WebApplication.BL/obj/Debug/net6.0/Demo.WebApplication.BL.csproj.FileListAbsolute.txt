@@ -1,0 +1,17 @@
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.BL.deps.json
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.BL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.BL.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.Common.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.DL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.Common.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\bin\Debug\net6.0\Demo.WebApplication.DL.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.csproj.AssemblyReference.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.AssemblyInfoInputs.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.AssemblyInfo.cs
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.csproj.CopyComplete
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\refint\Demo.WebApplication.BL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\Demo.WebApplication.BL.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.BL\obj\Debug\net6.0\ref\Demo.WebApplication.BL.dll

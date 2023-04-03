@@ -1,0 +1,14 @@
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\bin\Debug\net6.0\Demo.WebApplication.Common.deps.json
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\bin\Debug\net6.0\Demo.WebApplication.Common.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\bin\Debug\net6.0\Demo.WebApplication.Common.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.csproj.AssemblyReference.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.Resource.resources
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.csproj.GenerateResource.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.AssemblyInfoInputs.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.AssemblyInfo.cs
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\refint\Demo.WebApplication.Common.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\Demo.WebApplication.Common.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Common\obj\Debug\net6.0\ref\Demo.WebApplication.Common.dll

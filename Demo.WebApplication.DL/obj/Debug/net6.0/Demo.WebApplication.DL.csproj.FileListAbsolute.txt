@@ -1,0 +1,15 @@
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\bin\Debug\net6.0\Demo.WebApplication.DL.deps.json
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\bin\Debug\net6.0\Demo.WebApplication.DL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\bin\Debug\net6.0\Demo.WebApplication.DL.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\bin\Debug\net6.0\Demo.WebApplication.Common.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\bin\Debug\net6.0\Demo.WebApplication.Common.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.csproj.AssemblyReference.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.AssemblyInfoInputs.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.AssemblyInfo.cs
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.csproj.CopyComplete
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\refint\Demo.WebApplication.DL.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\Demo.WebApplication.DL.pdb
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.DL\obj\Debug\net6.0\ref\Demo.WebApplication.DL.dll

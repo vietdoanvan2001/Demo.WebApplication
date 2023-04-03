@@ -1,0 +1,198 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.BL\\Demo.WebApplication.BL.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.BL\\Demo.WebApplication.BL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.BL\\Demo.WebApplication.BL.csproj",
+        "projectName": "Demo.WebApplication.BL",
+        "projectPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.BL\\Demo.WebApplication.BL.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.BL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj": {
+                "projectPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj"
+              },
+              "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.DL\\Demo.WebApplication.DL.csproj": {
+                "projectPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.DL\\Demo.WebApplication.DL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj",
+        "projectName": "Demo.WebApplication.Common",
+        "projectPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.DL\\Demo.WebApplication.DL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.DL\\Demo.WebApplication.DL.csproj",
+        "projectName": "Demo.WebApplication.DL",
+        "projectPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.DL\\Demo.WebApplication.DL.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.DL\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj": {
+                "projectPath": "C:\\Users\\Administrator\\source\\repos\\Demo.WebApplication\\Demo.WebApplication.Common\\Demo.WebApplication.Common.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.123, )"
+            },
+            "EPPlus": {
+              "target": "Package",
+              "version": "[6.2.0, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.2.5, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
