@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.WebApplication.Common.Entities.DTO
 {
-    public class multipleDeleteParams
+    public class MultipleDeleteParams
     {
         public string listID { get; set; }
     }

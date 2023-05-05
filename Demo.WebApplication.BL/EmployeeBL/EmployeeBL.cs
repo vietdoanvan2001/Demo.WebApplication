@@ -6,16 +6,20 @@ using Demo.WebApplication.Common.Entities.DTO;
 using Demo.WebApplication.Common.Enums;
 using Demo.WebApplication.DL.BaseDL;
 using Demo.WebApplication.DL.EmployeeDL;
+using DocumentFormat.OpenXml.Spreadsheet;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Demo.WebApplication.Common.Attibutes.Attributes;
+using Color = System.Drawing.Color;
 
 namespace Demo.WebApplication.BL.EmployeeBL
 {
@@ -23,8 +27,8 @@ namespace Demo.WebApplication.BL.EmployeeBL
     {
         #region Field
         
-        private IEmployeeDL _employeeDL;
-        private IBaseDL<Employee> _baseDL;
+        public IEmployeeDL _employeeDL;
+        public IBaseDL<Employee> _baseDL;
 
         #endregion
 
@@ -45,7 +49,7 @@ namespace Demo.WebApplication.BL.EmployeeBL
         /// author: VietDV(27/3/2023)
         /// </summary>
         /// <returns>Mã nhân viên kết tiếp</returns>
-        public serviceResult GetNewEmployeeCode()
+        public ServiceResult GetNewEmployeeCode()
         {
             //Lấy mã nhân viên lớn nhất
             var result = _employeeDL.GetNewEmployeeCode();
@@ -61,33 +65,34 @@ namespace Demo.WebApplication.BL.EmployeeBL
                 String newCode = code[0] + "-" + nextNumber.ToString();
 
                 //trả về mã kế tiếp
-                return new serviceResult(true, newCode);
+                return new ServiceResult(true, newCode);
             }
             else
             {
                 if(result.Data == Resource.ServiceResult_Fail)
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Exception);
+                    return new ServiceResult(false, Resource.ServiceResult_Exception);
                 }
             }
 
         }
 
         /// <summary>
-        /// lấy thông tin nhân viên theo phân trang
-        /// author: VietDV(27/3/2023)
+        /// Phân trang nhân viên
+        /// author:VietDV(26/4/2023)
         /// </summary>
-        /// <param name="keyword">từ khoá tìm kiếm (tìm kiếm theo tên hoặc mã)</param>
-        /// <param name="pageSize">số bản ghi trên 1 trang</param>
-        /// <param name="offSet">index bản ghi bắt đầu</param>
-        /// <returns>các bản ghi thoả mã điều kiện</returns>
-        public pagingResult GetPaging(string? keyword, int pageSize = 10, int offSet = 0)
+        /// <param name="keyword">Tên hoặc mã nhân viên</param>
+        /// <param name="MISACode">Mã phòng ban</param>
+        /// <param name="pageSize">số bản ghi trên trang</param>
+        /// <param name="offSet">vị trí bắt đầu</param>
+        /// <returns>mảng các bản ghi đã lọc</returns>
+        public PagingResult GetPaging(string? keyword,String? MISACode, int pageSize = 50, int offSet = 0)
         {
-            var result =  _employeeDL.GetPaging(keyword, pageSize, offSet);
+            var result =  _employeeDL.GetPaging(keyword, MISACode, pageSize, offSet);
 
             var totalRecord = result["Total"];
             var resultArray = (List<Employee>)result["PageData"];
@@ -117,9 +122,9 @@ namespace Demo.WebApplication.BL.EmployeeBL
             var begin = (offSet + 1) > 0 ? (offSet + 1) : 1;
 
             //index bản ghi cuối của trang luôn <= tổng số bản ghi
-            var end = (begin + pageSize) <= Convert.ToInt32(totalRecord) ? (begin + pageSize) : Convert.ToInt32(totalRecord);
+            var end = (begin + pageSize) <= Convert.ToInt32(totalRecord) ? (begin + pageSize - 1) : Convert.ToInt32(totalRecord);
 
-            return new pagingResult(resultArray, Convert.ToInt32(totalRecord), begin, end);
+            return new PagingResult(resultArray, Convert.ToInt32(totalRecord), begin, end);
         }
 
         /// <summary>
@@ -128,7 +133,7 @@ namespace Demo.WebApplication.BL.EmployeeBL
         /// </summary>
         /// <param name="IDs">Danh sách id các bản ghi muốn xoá</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult MultipleDelete(string IDs)
+        public ServiceResult MultipleDelete(string IDs)
         {
             return _employeeDL.MultipleDelete(IDs);
         }
@@ -138,90 +143,139 @@ namespace Demo.WebApplication.BL.EmployeeBL
         /// Author: VietDV(27/3/2023)
         /// </summary>
         /// <returns></returns>
-        public MemoryStream ExcelExport(exportDataParams param)
-        {
-            var AllData = _employeeDL.ExcelExport(param);
+        //public MemoryStream ExcelExport(ExportDataParams param)
+        //{
+        //    var AllData = _employeeDL.ExcelExport(param);
 
-            //gán tên giới tính theo giá trị giới tính
-            foreach (Employee emp in AllData)
-            {
-                //Giới tính nam
-                if (emp.Gender == Gender.Male)
-                {
-                    emp.GenderName = Resource.Male;
-                }
-                //giới tính nữ
-                else if (emp.Gender == Gender.Female)
-                {
-                    emp.GenderName = Resource.Female;
-                }
-                //giới tính khác
-                else if (emp.Gender == Gender.Other)
-                {
-                    emp.GenderName = Resource.Other;
-                }
+        //    //gán tên giới tính theo giá trị giới tính
+        //    foreach (Employee emp in AllData)
+        //    {
+        //        //Giới tính nam
+        //        if (emp.Gender == Gender.Male)
+        //        {
+        //            emp.GenderName = Resource.Male;
+        //        }
+        //        //giới tính nữ
+        //        else if (emp.Gender == Gender.Female)
+        //        {
+        //            emp.GenderName = Resource.Female;
+        //        }
+        //        //giới tính khác
+        //        else if (emp.Gender == Gender.Other)
+        //        {
+        //            emp.GenderName = Resource.Other;
+        //        }
+        //    }
 
-                
-
-            }
-
-            DataTable Dt = new DataTable();
+        //    DataTable Dt = new DataTable();
 
             
 
-            Dt.Columns.Add(Resource.Title_Index, typeof(string));
-            Dt.Columns.Add(Resource.Title_EmployeeCode, typeof(string));
-            Dt.Columns.Add(Resource.Title_FullName, typeof(string));
-            Dt.Columns.Add(Resource.Title_Gender, typeof(string));
-            Dt.Columns.Add(Resource.Title_DateOfBirth, typeof(string));
-            Dt.Columns.Add(Resource.Title_IdentityNumber, typeof(string));
-            Dt.Columns.Add(Resource.Title_Position, typeof(string));
-            Dt.Columns.Add(Resource.Title_Department, typeof(string));
-            Dt.Columns.Add(Resource.Title_BankNumber, typeof(string));
-            Dt.Columns.Add(Resource.Title_BankName, typeof(string));
-            Dt.Columns.Add(Resource.Title_BankBranch, typeof(string));
-            int stt = 1;
-            foreach (var data in AllData)
-            {
-                DataRow row = Dt.NewRow();
-                row[0] = stt++;
-                row[1] = data.EmployeeCode;
-                row[2] = data.FullName;
-                row[3] = data.GenderName;
-                row[4] = data.DateOfBirth;
-                row[5] = data.IdentityNumber;
-                row[6] = data.PositionName;
-                row[7] = data.DepartmentName;
-                row[8] = data.BankNumber;
-                row[9] = data.BankName;
-                row[10] = data.BankBranch;
-                Dt.Rows.Add(row);
-            }
+        //    Dt.Columns.Add(Resource.Title_Index, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_EmployeeCode, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_FullName, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_Gender, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_DateOfBirth, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_IdentityNumber, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_Position, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_Department, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_BankNumber, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_BankName, typeof(string));
+        //    Dt.Columns.Add(Resource.Title_BankBranch, typeof(string));
 
-            var stream = new MemoryStream();
-            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-            using (var package = new ExcelPackage(stream))
-            {
-                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                //workSheet.Cells.AutoFitColumns();
+        //    int stt = 1;
 
-                workSheet.Column(1).Width = 5;
-                workSheet.Column(2).Width = 15;
-                workSheet.Column(3).Width = 30;
-                workSheet.Column(4).Width = 10;
-                workSheet.Column(5).Width = 30;
-                workSheet.Column(6).Width = 20;
-                workSheet.Column(7).Width = 30;
-                workSheet.Column(8).Width = 30;
-                workSheet.Column(9).Width = 20;
-                workSheet.Column(10).Width = 30;
-                workSheet.Column(11).Width = 30;
-                workSheet.Cells.LoadFromDataTable(Dt, true);
-                package.Save();
-            }
-            stream.Position = 0;
-            string excelName = $"UserList.xlsx-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}";
-            return stream;
+        //    foreach (var data in AllData)
+        //    {
+        //        DataRow row = Dt.NewRow();
+        //        row[0] = stt++;
+        //        row[1] = data.EmployeeCode;
+        //        row[2] = data.FullName;
+        //        row[3] = data.GenderName;
+        //        row[4] = data.DateOfBirth?.ToString("dd-MM-yyyy");
+        //        row[5] = data.IdentityNumber;
+        //        row[6] = data.PositionName;
+        //        row[7] = data.DepartmentName;
+        //        row[8] = data.BankNumber;
+        //        row[9] = data.BankName;
+        //        row[10] = data.BankBranch;
+        //        Dt.Rows.Add(row);
+        //    }
+
+        //    var stream = new MemoryStream();
+        //    ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+        //    using (var package = new ExcelPackage(stream))
+        //    {
+        //        var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+
+        //        //Chỉnh độ rộng cột
+        //        workSheet.Column(1).Width = 5;
+        //        workSheet.Column(2).Width = 15;
+        //        workSheet.Column(3).Width = 30;
+        //        workSheet.Column(4).Width = 10;
+        //        workSheet.Column(5).Width = 20;
+        //        workSheet.Column(6).Width = 20;
+        //        workSheet.Column(7).Width = 30;
+        //        workSheet.Column(8).Width = 30;
+        //        workSheet.Column(9).Width = 20;
+        //        workSheet.Column(10).Width = 30;
+        //        workSheet.Column(11).Width = 30;
+
+        //        // Định dạng tên bảng
+        //        workSheet.Cells[1, 1].Value = Resource.Excel_Table_Name;
+        //        workSheet.Row(1).Height = 24;
+        //        workSheet.Cells[1, 1].Style.Font.Size = 18;
+        //        workSheet.Cells[1, 1, 1, Dt.Columns.Count].Merge = true;
+        //        workSheet.Cells[1, 1].Style.Font.Bold = true;
+        //        workSheet.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+        //        //Load dữ liệu vào bảng
+        //        workSheet.Cells[3,1].LoadFromDataTable(Dt, true);
+
+        //        // Định dạng tiêu đề bảng
+        //        for (int i = 1; i <= Dt.Columns.Count; i++)
+        //        {
+        //            workSheet.Cells[3, i].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        //            workSheet.Cells[3, i].Style.Font.Bold = true;
+        //            workSheet.Cells[3, i].Style.Fill.PatternType = ExcelFillStyle.Solid;
+        //            workSheet.Cells[3, i].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+        //        }
+
+        //        // Căn giữa cột stt và Ngày sinh
+        //        for (int i = 1; i <= Dt.Rows.Count + 3; i++)
+        //        {
+        //            workSheet.Cells[i, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        //            workSheet.Cells[i, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        //        }
+
+        //        //Thêm boder cho các ô trong bảng
+        //        for (int row = 3; row <= Dt.Rows.Count + 3; row++)
+        //        {
+        //            for (int col = 1; col <= Dt.Columns.Count; col++)
+        //            {
+        //                workSheet.Cells[row, col].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+        //                workSheet.Cells[row, col].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+        //                workSheet.Cells[row, col].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        //                workSheet.Cells[row, col].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        //            }
+        //        }
+
+        //            package.Save();
+        //    }
+        //    stream.Position = 0;
+        //    string excelName = $"UserList.xlsx-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}";
+        //    return stream;
+        //}
+
+        /// <summary>
+        /// Lấy thông tin nhân viên theo id
+        /// author: VietDV(27/3/2023)
+        /// </summary>
+        /// <param name="recordId">id nhân viên muốn lấy thông tin</param>
+        /// <returns>thông tin nhân viên</returns>
+        public ServiceResult GetEmployeeById(Guid recordId)
+        {
+            return _employeeDL.GetEmployeeById(recordId);
         }
 
         #endregion
@@ -234,9 +288,9 @@ namespace Demo.WebApplication.BL.EmployeeBL
         /// <param name="record">form body dữ liệu cần validate</param>
         /// <param name="isInsert">cờ xác định xem có phải là API thêm mới không</param>
         /// <returns>Danh sách các lỗi</returns>
-        public override List<errorResult> ValidateRecordCustom(Employee record, bool isInsert)
+        public override List<ErrorResult> ValidateRecordCustom(Employee record, bool isInsert)
         {
-            var validateFailuresCustom = new List<errorResult>();
+            var validateFailuresCustom = new List<ErrorResult>();
             var properties = typeof(Employee).GetProperties();
 
             foreach (var property in properties)
@@ -256,7 +310,7 @@ namespace Demo.WebApplication.BL.EmployeeBL
                     string[] array = code.Split("-");
                     if (array.Length != 2 || array[0] != "NV" || Regex.IsMatch(array[1], @"^\d+$") == false)
                     {
-                        validateFailuresCustom.Add( new errorResult{ 
+                        validateFailuresCustom.Add( new ErrorResult{ 
                             ErrorField = propertyName, 
                             ErrorCode = ErrorCode.WrongFormatCode, 
                             DevMsg = Resource.DevMsg_ValidateFailed, 
@@ -272,7 +326,7 @@ namespace Demo.WebApplication.BL.EmployeeBL
                     var result = _baseDL.CheckDuplicateID(propertyValue.ToString());
                     if (result.IsSuccess == true)
                     {
-                        validateFailuresCustom.Add( new errorResult
+                        validateFailuresCustom.Add( new ErrorResult
                         {
                             ErrorField = propertyName,
                             ErrorCode = ErrorCode.DuplicateCode,
@@ -286,12 +340,12 @@ namespace Demo.WebApplication.BL.EmployeeBL
                 //validate trường có định dạng email
                 if (isEmailAttribute != null)
                 {
-                    if (propertyValue != null)
+                    if (propertyValue != null && propertyValue.ToString().Trim() != "")
                     {
                         bool isValidate = Regex.IsMatch(propertyValue.ToString(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                         if (!isValidate)
                         {
-                            validateFailuresCustom.Add(new errorResult { 
+                            validateFailuresCustom.Add(new ErrorResult { 
                                 ErrorField = propertyName,
                                 ErrorCode = ErrorCode.WrongFormatEmail,
                                 DevMsg = Resource.DevMsg_ValidateFailed,
@@ -304,13 +358,13 @@ namespace Demo.WebApplication.BL.EmployeeBL
                 //validate trường có định dạng chỉ chứa các chữ số
                 if (onlyNumberAttribute != null)
                 {
-                    if (propertyValue != null)
+                    if (propertyValue != null && propertyValue.ToString().Trim() != "")
                     {
                         string value = propertyValue.ToString();
                         bool isNumeric = Regex.IsMatch(value, @"^\d+$");
                         if (!isNumeric)
                         {
-                            validateFailuresCustom.Add( new errorResult{ 
+                            validateFailuresCustom.Add( new ErrorResult{ 
                                 ErrorField = propertyName, 
                                 ErrorCode = ErrorCode.WrongFormatOnlyNumber, 
                                 DevMsg = Resource.DevMsg_ValidateFailed, 

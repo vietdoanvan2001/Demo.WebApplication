@@ -2,7 +2,7 @@
 
 namespace Demo.WebApplication.Common.Entities.DTO
 {
-    public class errorResult
+    public class ErrorResult
     {
 
         /// <summary>

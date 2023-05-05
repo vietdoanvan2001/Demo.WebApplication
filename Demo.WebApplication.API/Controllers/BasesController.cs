@@ -53,7 +53,7 @@ namespace Demo.WebApplication.API.Controllers
                 {
                     if (serviceResult.Data == Resource.ServiceResult_Fail)
                     {
-                        return StatusCode(204, new errorResult
+                        return StatusCode(204, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlReturnNull,
                             DevMsg = Resource.ServiceResult_Fail,
@@ -63,7 +63,7 @@ namespace Demo.WebApplication.API.Controllers
                     }
                     else if (serviceResult.Data == Resource.ServiceResult_Exception)
                     {
-                        return StatusCode(500, new errorResult
+                        return StatusCode(500, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlCatchException,
                             DevMsg = Resource.ServiceResult_Exception,
@@ -81,7 +81,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,
@@ -113,7 +113,7 @@ namespace Demo.WebApplication.API.Controllers
                 {
                     if(serviceResult.Data == Resource.ServiceResult_Fail)
                     {
-                        return StatusCode(204, new errorResult 
+                        return StatusCode(204, new ErrorResult 
                         { 
                             ErrorCode = ErrorCode.SqlReturnNull,
                             DevMsg = Resource.ServiceResult_Fail,
@@ -123,7 +123,7 @@ namespace Demo.WebApplication.API.Controllers
                     }
                     else if(serviceResult.Data == Resource.ServiceResult_Exception)
                     {
-                        return StatusCode(500, new errorResult
+                        return StatusCode(500, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlCatchException,
                             DevMsg = Resource.ServiceResult_Exception,
@@ -141,7 +141,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,
@@ -173,7 +173,7 @@ namespace Demo.WebApplication.API.Controllers
                 {
                     if (serviceResult.Data == Resource.ServiceResult_Fail)
                     {
-                        return StatusCode(204, new errorResult
+                        return StatusCode(204, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlReturnNull,
                             DevMsg = Resource.ServiceResult_Fail,
@@ -183,7 +183,7 @@ namespace Demo.WebApplication.API.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, new errorResult
+                        return StatusCode(500, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlCatchException,
                             DevMsg = Resource.ServiceResult_Exception,
@@ -196,7 +196,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,
@@ -204,62 +204,6 @@ namespace Demo.WebApplication.API.Controllers
                     TradeId = HttpContext.TraceIdentifier,
                 });
             }
-        }
-
-        /// <summary>
-        /// API Lấy thông tin chi tiết 1 bản ghi
-        /// Created by: VietDV(09/03/2001)
-        /// </summary>
-        /// <param name="id">ID bản ghi muốn lấy</param>
-        /// <returns>Đối tượng bản ghi</returns>
-        [HttpGet("{id}")]
-        public IActionResult GetRecordById([FromRoute] Guid id)
-        {
-            try
-            {
-                var serviceResult = _baseBL.GetRecordById(id);
-
-                if(serviceResult.IsSuccess == true)
-                {
-                    return StatusCode(200, serviceResult.Data);
-                }
-                else
-                {
-                    if (serviceResult.Data == Resource.ServiceResult_Fail)
-                    {
-                        return StatusCode(204, new errorResult
-                        {
-                            ErrorCode = ErrorCode.SqlReturnNull,
-                            DevMsg = Resource.ServiceResult_Fail,
-                            UserMsg = Resource.UserMsg_Exception,
-                            TradeId = HttpContext.TraceIdentifier,
-                        });
-                    }
-                    else
-                    {
-                        return StatusCode(500, new errorResult
-                        {
-                            ErrorCode = ErrorCode.SqlCatchException,
-                            DevMsg = Resource.ServiceResult_Exception,
-                            UserMsg = Resource.UserMsg_Exception,
-                            TradeId = HttpContext.TraceIdentifier,
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-
-                Console.WriteLine(ex.Message);
-                return StatusCode(500, new errorResult
-                {
-                    ErrorCode = ErrorCode.Exception,
-                    DevMsg = Resource.DevMsg_Exception,
-                    UserMsg = Resource.UserMsg_Exception,
-                    TradeId = HttpContext.TraceIdentifier,
-                });
-            }
-
         }
 
         /// <summary>
@@ -283,7 +227,7 @@ namespace Demo.WebApplication.API.Controllers
                 {
                     if (serviceResult.Data == Resource.ServiceResult_Fail)
                     {
-                        return StatusCode(204, new errorResult
+                        return StatusCode(204, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlReturnNull,
                             DevMsg = Resource.ServiceResult_Fail,
@@ -293,7 +237,7 @@ namespace Demo.WebApplication.API.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, new errorResult
+                        return StatusCode(500, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlCatchException,
                             DevMsg = Resource.ServiceResult_Exception,
@@ -306,7 +250,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,

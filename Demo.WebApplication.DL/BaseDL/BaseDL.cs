@@ -35,7 +35,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// author:VietDV(27/3/2023)
         /// </summary>
         /// <returns>Danh sách toàn bộ các bản ghi</returns>
-        public serviceResult GetAllRecords()
+        public ServiceResult GetAllRecords() 
         {
             //chuẩn bị tên stored
             String storedProcedureName = $"Proc_{typeof(T).Name}_GetAll";
@@ -43,33 +43,26 @@ namespace Demo.WebApplication.DL.BaseDL
             var dbConnection = GetOpenConnection();
 
             //thực hiện câu lệnh sql
-            var trans = dbConnection.BeginTransaction();
+            //var trans = dbConnection.BeginTransaction();
             try
             {
 
                 var response = dbConnection.Query<T>(storedProcedureName, commandType: System.Data.CommandType.StoredProcedure);
-                trans.Commit();
-                
 
-                if(response != null)
+                dbConnection.Close();
+                if (response != null)
                 {
-                    return new serviceResult(true, response);
+                    return new ServiceResult(true, response);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
             catch (Exception)
             {
-                trans.Rollback();
-                return new serviceResult(false, Resource.ServiceResult_Exception);
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
-            finally
-            {
-                dbConnection.Close();
-            }
-
         }
 
         /// <summary>
@@ -78,7 +71,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// </summary>
         /// <param name="recordId">id bản ghi muốn xoá</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult DeleteRecordById(Guid recordId)
+        public ServiceResult DeleteRecordById(Guid recordId)
         {
             //chuẩn bị tên stored
             String storedProcedureName = $"Proc_{typeof(T).Name}_DeleteById";
@@ -98,60 +91,17 @@ namespace Demo.WebApplication.DL.BaseDL
 
                 if (affectedRow > 0)
                 {
-                    return new serviceResult(true, Resource.ServiceResult_Success);
+                    return new ServiceResult(true, Resource.ServiceResult_Success);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
             catch (Exception)
             {
 
-                return new serviceResult(false, Resource.ServiceResult_Exception);
-            }
-        }
-
-        /// <summary>
-        /// Lấy thông tin bản ghi theo id
-        /// author: VietDV(27/3/2023)
-        /// </summary>
-        /// <param name="recordId">id bản ghi muốn lấy thông tin</param>
-        /// <returns>thông tin bản ghi</returns>
-        public serviceResult GetRecordById(Guid recordId)
-        {
-            //chuẩn bị tên stored
-            String storedProcedureName = $"Proc_{typeof(T).Name}_GetById";
-
-            //chuẩn bị tham số đầu vào
-            var paprameters = new DynamicParameters();
-            paprameters.Add($"v_{typeof(T).Name}Id", recordId);
-
-            //khởi tạo kết nối tới DB
-
-            var dbConnection = GetOpenConnection();
-
-
-            //thực hiện câu lệnh sql
-            try
-            {
-                T record = dbConnection.QueryFirstOrDefault<T>(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
-
-                dbConnection.Close();
-
-                if (record != null)
-                {
-                    return new serviceResult(true, record);
-                }
-                else
-                {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
-                }
-            }
-            catch (Exception)
-            {
-
-                return new serviceResult(false, Resource.ServiceResult_Exception);
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
         }
 
@@ -161,8 +111,9 @@ namespace Demo.WebApplication.DL.BaseDL
         /// </summary>
         /// <param name="record">thông tin bản ghi</param>
         /// <returns>trạng thái khi thực hiện câu lệnh sql</returns>
-        public serviceResult InsertRecord(T record)
+        public ServiceResult InsertRecord(T record)
         {
+            Guid recordId = Guid.NewGuid();
             //chuẩn bị tên stored
             String storedProcedureName = $"Proc_{typeof(T).Name}_Insert";
 
@@ -173,13 +124,18 @@ namespace Demo.WebApplication.DL.BaseDL
             foreach (var property in properties)
             {
                 var primaryKey = (PrimaryKeyAttribute?)property.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault();
+                var id = (IdAttribute?)property.GetCustomAttributes(typeof(IdAttribute), false).FirstOrDefault();
                 var currentTime = (CurrentTimeAttribute?)property.GetCustomAttributes(typeof(CurrentTimeAttribute), false).FirstOrDefault();
 
+                if (id != null)
+                {
+                    paprameters.Add($"v_{property.Name}", recordId);
+                }
                 if (currentTime != null)
                 {
                     paprameters.Add($"v_{property.Name}", DateTime.Now);
                 }
-                if (currentTime == null && primaryKey == null)
+                if (currentTime == null && primaryKey == null && id == null)
                 {
                     paprameters.Add($"v_{property.Name}", property.GetValue(record));
                 }
@@ -195,17 +151,17 @@ namespace Demo.WebApplication.DL.BaseDL
 
                 if (affectedRow > 0)
                 {
-                    return new serviceResult(true, Resource.ServiceResult_Success);
+                    return new ServiceResult(true, recordId);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
             catch (Exception)
             {
 
-                return new serviceResult(false, Resource.ServiceResult_Exception);
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
 
         }
@@ -217,7 +173,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// <param name="recordId">id bản ghi muốn cập nhật</param>
         /// <param name="record">thông tin cập nhật</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult UpdateRecord(Guid recordId, T record)
+        public ServiceResult UpdateRecord(Guid recordId, T record)
         {
             //chuẩn bị tên stored
             String storedProcedureName = $"Proc_{typeof(T).Name}_Update";
@@ -255,17 +211,17 @@ namespace Demo.WebApplication.DL.BaseDL
 
                 if (affectedRow > 0)
                 {
-                    return new serviceResult(true, Resource.ServiceResult_Success);
+                    return new ServiceResult(true, Resource.ServiceResult_Success);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
             catch (Exception)
             {
 
-                return new serviceResult(false, Resource.ServiceResult_Exception);
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
         }
 
@@ -275,7 +231,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// </summary>
         /// <param name="id">id muốn kiểm tra</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult CheckDuplicateID(string id)
+        public ServiceResult CheckDuplicateID(string id)
         {
             //chuẩn bị tên stored
             String storedProcedureName = "Proc_Employee_CheckExistEmployeeCode";
@@ -294,17 +250,17 @@ namespace Demo.WebApplication.DL.BaseDL
 
                 if (response != null)
                 {
-                    return new serviceResult(true, Resource.ServiceResult_Success);
+                    return new ServiceResult(true, Resource.ServiceResult_Success);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
             catch (Exception)
             {
 
-                return new serviceResult(false, Resource.ServiceResult_Exception);
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
         }
         #endregion

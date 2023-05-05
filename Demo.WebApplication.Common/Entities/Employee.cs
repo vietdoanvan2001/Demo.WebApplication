@@ -96,7 +96,22 @@ namespace Demo.WebApplication.Common.Entities
         /// ID đơn vị
         /// </summary>
         [NotEmpty]
-        public Guid DepartmentId { get; set; }
+        public String? DepartmentId { get; set; }
+
+        /// <summary>
+        /// Mã vị trí
+        /// </summary>
+        public String? MISACode { get; set; }
+
+        /// <summary>
+        /// Tên phòng ban
+        /// </summary>
+        public String? DepartmentName { get; set; }
+
+        /// <summary>
+        /// Id chức vụ
+        /// </summary>
+        public Guid? PositionId { get; set; }
 
         /// <summary>
         /// Tên chức vụ
@@ -124,11 +139,6 @@ namespace Demo.WebApplication.Common.Entities
         /// Người chỉnh sửa
         /// </summary>
         public String ? ModifiedBy { get; set; }
-
-        /// <summary>
-        /// Tên phòng ban
-        /// </summary>
-        public String ? DepartmentName { get; set; }
 
         /// <summary>
         /// Tên giới tính

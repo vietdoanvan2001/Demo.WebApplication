@@ -37,7 +37,23 @@
           }
         }
       },
-      "EPPlus/6.2.0": {
+      "DocumentFormat.OpenXml/2.19.0": {
+        "type": "package",
+        "dependencies": {
+          "System.IO.Packaging": "4.7.0"
+        },
+        "compile": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "EPPlus/6.2.3": {
         "type": "package",
         "dependencies": {
           "EPPlus.Interfaces": "6.1.1",
@@ -1493,6 +1509,19 @@
           "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
         }
       },
+      "System.IO.Packaging/4.7.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.IO.Packaging.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.IO.Packaging.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Linq/4.1.0": {
         "type": "package",
         "dependencies": {
@@ -2043,6 +2072,7 @@
           "Dapper": "2.0.123",
           "Demo.WebApplication.BL": "1.0.0",
           "Demo.WebApplication.Common": "1.0.0",
+          "EPPlus": "6.2.3",
           "MySqlConnector": "2.2.5",
           "Swashbuckle.AspNetCore": "6.2.3"
         },
@@ -2061,7 +2091,9 @@
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
           "Demo.WebApplication.Common": "1.0.0",
-          "Demo.WebApplication.DL": "1.0.0"
+          "Demo.WebApplication.DL": "1.0.0",
+          "DocumentFormat.OpenXml": "2.19.0",
+          "EPPlus": "6.2.3"
         },
         "compile": {
           "bin/placeholder/Demo.WebApplication.BL.dll": {}
@@ -2192,15 +2224,39 @@
         "lib/netstandard2.0/Dapper.xml"
       ]
     },
-    "EPPlus/6.2.0": {
-      "sha512": "/4VYGfSKzlFqVCt3xCWJKNeiqQA7sT/2ODb/+vUsv8rnhv+XTVs4NBNFXl04iLUOXauVD0GivwzdRgEZB/0H2w==",
+    "DocumentFormat.OpenXml/2.19.0": {
+      "sha512": "BLFqodowHZHR/A/sKU/6e+63J5ONWDdv8hEuSZOUiBfGFuVmsG9P3o+LMSq+dajNWE1q+lqVSa1H5FuhLX8/fA==",
       "type": "package",
-      "path": "epplus/6.2.0",
+      "path": "documentformat.openxml/2.19.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "documentformat.openxml.2.19.0.nupkg.sha512",
+        "documentformat.openxml.nuspec",
+        "icon.png",
+        "lib/net35/DocumentFormat.OpenXml.dll",
+        "lib/net35/DocumentFormat.OpenXml.xml",
+        "lib/net40/DocumentFormat.OpenXml.dll",
+        "lib/net40/DocumentFormat.OpenXml.xml",
+        "lib/net46/DocumentFormat.OpenXml.dll",
+        "lib/net46/DocumentFormat.OpenXml.xml",
+        "lib/net6.0/DocumentFormat.OpenXml.dll",
+        "lib/net6.0/DocumentFormat.OpenXml.xml",
+        "lib/netstandard1.3/DocumentFormat.OpenXml.dll",
+        "lib/netstandard1.3/DocumentFormat.OpenXml.xml",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.dll",
+        "lib/netstandard2.0/DocumentFormat.OpenXml.xml"
+      ]
+    },
+    "EPPlus/6.2.3": {
+      "sha512": "Lyp6zJHNU1QaDIcSheBCazqlqgs+8ByHGYwU9vEsbY7EQfPhd0nnejcHrM5DqaWdoXvKuyPoWBYNSz3iIyUNUQ==",
+      "type": "package",
+      "path": "epplus/6.2.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "EPPlusLogo.png",
-        "epplus.6.2.0.nupkg.sha512",
+        "epplus.6.2.3.nupkg.sha512",
         "epplus.nuspec",
         "lib/net35/EPPlus.dll",
         "lib/net35/EPPlus.xml",
@@ -4670,6 +4726,33 @@
         "ref/xamarinwatchos10/_._",
         "system.io.filesystem.primitives.4.0.1.nupkg.sha512",
         "system.io.filesystem.primitives.nuspec"
+      ]
+    },
+    "System.IO.Packaging/4.7.0": {
+      "sha512": "9VV4KAbgRQZ79iEoG40KIeZy38O30oWwewScAST879+oki8g/Wa2HXZQgrhDDxQM4GkP1PnRJll05NMiVPbYAw==",
+      "type": "package",
+      "path": "system.io.packaging/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net46/System.IO.Packaging.dll",
+        "lib/net46/System.IO.Packaging.xml",
+        "lib/netstandard1.3/System.IO.Packaging.dll",
+        "lib/netstandard1.3/System.IO.Packaging.xml",
+        "lib/netstandard2.0/System.IO.Packaging.dll",
+        "lib/netstandard2.0/System.IO.Packaging.xml",
+        "ref/net46/System.IO.Packaging.dll",
+        "ref/net46/System.IO.Packaging.xml",
+        "ref/netstandard1.3/System.IO.Packaging.dll",
+        "ref/netstandard1.3/System.IO.Packaging.xml",
+        "ref/netstandard2.0/System.IO.Packaging.dll",
+        "ref/netstandard2.0/System.IO.Packaging.xml",
+        "system.io.packaging.4.7.0.nupkg.sha512",
+        "system.io.packaging.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Linq/4.1.0": {

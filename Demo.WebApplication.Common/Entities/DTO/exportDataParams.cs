@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.WebApplication.Common.Entities.DTO
 {
-    public class exportDataParams
+    public class ExportDataParams
     {
         /// <summary>
         /// Từ khoá tìm kiếm

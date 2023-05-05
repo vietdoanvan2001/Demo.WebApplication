@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DefaultMISACode" xml:space="preserve">
+    <value>1</value>
+    <comment>Giá trị mặc định của MISACode khi không truyền dữ liệu vào</comment>
+  </data>
   <data name="DevMsg_Exception" xml:space="preserve">
     <value>Catch an exception</value>
     <comment>Lỗi trả về cho Dev khi dính exception</comment>
@@ -133,6 +137,10 @@
     <value>Dữ liệu không được để trống</value>
     <comment>Lỗi validate các trường bắt buộc nhập</comment>
   </data>
+  <data name="Excel_Table_Name" xml:space="preserve">
+    <value>Danh sách nhân viên</value>
+    <comment>Tên bảng excel</comment>
+  </data>
   <data name="Female" xml:space="preserve">
     <value>Nữ</value>
     <comment>Giới tính nam</comment>
@@ -144,6 +152,70 @@
   <data name="Other" xml:space="preserve">
     <value>Khác</value>
     <comment>Giới tính khác</comment>
+  </data>
+  <data name="OverTimeInWorkingShift_AfterShift" xml:space="preserve">
+    <value>Sau ca</value>
+    <comment>thời điểm làm thêm sau ca</comment>
+  </data>
+  <data name="OverTimeInWorkingShift_BeforeShift" xml:space="preserve">
+    <value>Trước ca</value>
+    <comment>thời điểm làm thêm trước ca</comment>
+  </data>
+  <data name="OverTimeInWorkingShift_DayOff" xml:space="preserve">
+    <value>Ngày nghỉ</value>
+    <comment>thời điểm làm thêm ngày nghỉ</comment>
+  </data>
+  <data name="OverTimeInWorkingShift_MiddleShift" xml:space="preserve">
+    <value>Nghỉ giữa ca</value>
+    <comment>thời điểm làm thêm nghỉ giữa ca</comment>
+  </data>
+  <data name="Overtime_ApplyDate" xml:space="preserve">
+    <value>Ngày nộp đơn</value>
+  </data>
+  <data name="Overtime_ApprovalName" xml:space="preserve">
+    <value>Người duyệt</value>
+  </data>
+  <data name="Overtime_BreakTimeFrom" xml:space="preserve">
+    <value>Nghỉ giữa ca từ</value>
+  </data>
+  <data name="Overtime_BreakTimeTo" xml:space="preserve">
+    <value>Nghỉ giữa ca đến</value>
+  </data>
+  <data name="Overtime_DepartmentName" xml:space="preserve">
+    <value>Đơn vị công tác</value>
+  </data>
+  <data name="Overtime_Description" xml:space="preserve">
+    <value>Ghi chú</value>
+  </data>
+  <data name="Overtime_EmployeeCode" xml:space="preserve">
+    <value>Mã nhân viên</value>
+  </data>
+  <data name="Overtime_FullName" xml:space="preserve">
+    <value>Người nộp đơn</value>
+  </data>
+  <data name="Overtime_OverTimeInWorkingShiftName" xml:space="preserve">
+    <value>Thời điểm làm thêm</value>
+  </data>
+  <data name="Overtime_PositionName" xml:space="preserve">
+    <value>Vị trí công việc</value>
+  </data>
+  <data name="Overtime_Reason" xml:space="preserve">
+    <value>Lý do làm thêm</value>
+  </data>
+  <data name="Overtime_RelationShipNames" xml:space="preserve">
+    <value>Người liên quan</value>
+  </data>
+  <data name="Overtime_Status" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Overtime_ToDate" xml:space="preserve">
+    <value>Làm thêm đến</value>
+  </data>
+  <data name="Overtime_WorkingShiftName" xml:space="preserve">
+    <value>Ca áp dụng</value>
+  </data>
+  <data name="Ovettime_FromDate" xml:space="preserve">
+    <value>Làm thêm từ</value>
   </data>
   <data name="ServiceResult_Exception" xml:space="preserve">
     <value>Execute SQL Command catch Exception</value>
@@ -157,8 +229,25 @@
     <value>Execute SQL Command Success</value>
     <comment>Thực hiện câu lệnh SQL thành công</comment>
   </data>
+  <data name="Status_All" xml:space="preserve">
+    <value>Tất cả</value>
+    <comment>trạng thái tất cả</comment>
+  </data>
+  <data name="Status_Approved" xml:space="preserve">
+    <value>Đã duyệt</value>
+    <comment>trạng thái đã duyệt</comment>
+  </data>
+  <data name="Status_Denied" xml:space="preserve">
+    <value>Từ chối</value>
+    <comment>trạng thái từ chối</comment>
+  </data>
+  <data name="Status_Wait" xml:space="preserve">
+    <value>Chờ duyệt</value>
+    <comment>trạng thái chờ duyệt</comment>
+  </data>
   <data name="Title_BankBranch" xml:space="preserve">
     <value>Chi nhánh TK ngân hàng</value>
+    <comment>Chi nhánh tài khoản ngân hàng</comment>
   </data>
   <data name="Title_BankName" xml:space="preserve">
     <value>Tên ngân hàng</value>
@@ -183,9 +272,11 @@
   </data>
   <data name="Title_IdentityNumber" xml:space="preserve">
     <value>Số CMND</value>
+    <comment>Số chứng minh nhân dân</comment>
   </data>
   <data name="Title_Index" xml:space="preserve">
     <value>STT</value>
+    <comment>Số thứ tự</comment>
   </data>
   <data name="Title_Position" xml:space="preserve">
     <value>Chức danh</value>
@@ -197,6 +288,22 @@
   <data name="UserMsg_ValidateFailed" xml:space="preserve">
     <value>Dữ liệu đầu vào không hợp lệ</value>
     <comment>Lỗi trả về cho người dùng khi đầu vào 1 trong các trường validate không hợp lệ</comment>
+  </data>
+  <data name="WorkingShift_FirstCase" xml:space="preserve">
+    <value>Ca 1</value>
+    <comment>Ca làm thêm 1</comment>
+  </data>
+  <data name="WorkingShift_InWork" xml:space="preserve">
+    <value>Ca hành chính</value>
+    <comment>Ca làm thêm hành chính</comment>
+  </data>
+  <data name="WorkingShift_NightCase" xml:space="preserve">
+    <value>Ca đêm</value>
+    <comment>Ca làm thêm đêm</comment>
+  </data>
+  <data name="WorkingShift_SecondCase" xml:space="preserve">
+    <value>Ca 2</value>
+    <comment>Ca làm thêm 2</comment>
   </data>
   <data name="WrongCodeFormat" xml:space="preserve">
     <value>Mã nhân viên không đúng định dạng (NV-x) với x là số thứ tự nhân viên</value>

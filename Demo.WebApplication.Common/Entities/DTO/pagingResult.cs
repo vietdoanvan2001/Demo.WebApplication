@@ -1,6 +1,6 @@
 ﻿namespace Demo.WebApplication.Common.Entities.DTO
 {
-    public class pagingResult
+    public class PagingResult
     {
         /// <summary>
         /// Dữ liệu các nhân viên thoả mãn
@@ -31,7 +31,7 @@
         /// <param name="totalRecord">tổng số bản ghi trong DB</param>
         /// <param name="begin">index bản ghi bắt đầu của trang</param>
         /// <param name="end">index bản ghi kết thúc của trang</param>
-        public pagingResult(List<Employee> data, int totalRecord, int begin, int end)
+        public PagingResult(List<Employee> data, int totalRecord, int begin, int end)
         {
             Data = data;
             TotalRecord = totalRecord;

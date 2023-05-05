@@ -13,16 +13,18 @@ namespace Demo.WebApplication.BL.EmployeeBL
     public interface IEmployeeBL : IBaseBL<Employee>
     {
         /// <summary>
-        /// lấy thông tin nhân viên theo phân trang
-        /// author: VietDV(27/3/2023)
+        /// Phân trang nhân viên
+        /// author:VietDV(26/4/2023)
         /// </summary>
-        /// <param name="keyword">từ khoá tìm kiếm (tìm kiếm theo tên hoặc mã)</param>
-        /// <param name="pageSize">số bản ghi trên 1 trang</param>
-        /// <param name="offSet">index bản ghi bắt đầu</param>
-        /// <returns>các bản ghi thoả mã điều kiện</returns>
-        public pagingResult GetPaging(
+        /// <param name="keyword">Tên hoặc mã nhân viên</param>
+        /// <param name="MISACode">Mã phòng ban</param>
+        /// <param name="pageSize">số bản ghi trên trang</param>
+        /// <param name="offSet">vị trí bắt đầu</param>
+        /// <returns>mảng các bản ghi đã lọc</returns>
+        public PagingResult GetPaging(
             String? keyword,
-            int pageSize = 10,
+            String? MISACode,
+            int pageSize = 50,
             int offSet = 0
             );
 
@@ -31,7 +33,7 @@ namespace Demo.WebApplication.BL.EmployeeBL
         /// author: VietDV(27/3/2023)
         /// </summary>
         /// <returns>Mã nhân viên kết tiếp</returns>
-        public serviceResult GetNewEmployeeCode();
+        public ServiceResult GetNewEmployeeCode();
 
         /// <summary>
         /// Xoá nhiều bản ghi
@@ -39,13 +41,21 @@ namespace Demo.WebApplication.BL.EmployeeBL
         /// </summary>
         /// <param name="IDs">Danh sách id các bản ghi muốn xoá</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult MultipleDelete(String IDs);
+        public ServiceResult MultipleDelete(String IDs);
 
         /// <summary>
         /// API xuất dữ liệu ra file excel
         /// Author: VietDV(27/3/2023)
         /// </summary>
         /// <returns></returns>
-        public MemoryStream ExcelExport(exportDataParams param);
+        //public MemoryStream ExcelExport(ExportDataParams param);
+
+        /// <summary>
+        /// Lấy thông tin nhân viên theo id
+        /// author: VietDV(27/3/2023)
+        /// </summary>
+        /// <param name="recordId">id nhân viên muốn lấy thông tin</param>
+        /// <returns>thông tin nhân viên</returns>
+        public ServiceResult GetEmployeeById(Guid recordId);
     }
 }

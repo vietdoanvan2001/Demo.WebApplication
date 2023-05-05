@@ -132,3 +132,5 @@ C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.Unit
 C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.UnitTests\obj\Debug\net6.0\ref\Demo.WebApplication.UnitTests.dll
 C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.UnitTests\bin\Debug\net6.0\Castle.Core.dll
 C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.UnitTests\bin\Debug\net6.0\NSubstitute.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.UnitTests\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\Administrator\source\repos\Demo.WebApplication\Demo.WebApplication.UnitTests\bin\Debug\net6.0\System.IO.Packaging.dll

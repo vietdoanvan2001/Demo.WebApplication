@@ -101,6 +101,21 @@ namespace Demo.WebApplication.Common.Attibutes
         }
 
         /// <summary>
+        /// Attribute đánh dấu trường là id
+        /// </summary>
+        public class IdAttribute : ValidationAttribute
+        {
+            public override bool IsValid(object? value)
+            {
+                if (value == null)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Attribute đánh dấu trường là thời gian hiện tại
         /// </summary>
         public class CurrentTimeAttribute : ValidationAttribute

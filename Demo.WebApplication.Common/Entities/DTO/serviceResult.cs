@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Demo.WebApplication.Common.Entities.DTO
 {
-    public class serviceResult
+    public class ServiceResult
     {
         #region Field
         public bool IsSuccess;
@@ -21,7 +21,7 @@ namespace Demo.WebApplication.Common.Entities.DTO
         /// </summary>
         /// <param name="isSuccess">trạng thái thực hiện câu lệnh sql có thành công không</param>
         /// <param name="data">dữ liệu trả về kèm theo</param>
-        public serviceResult(bool isSuccess, object data)
+        public ServiceResult(bool isSuccess, object data)
         {
             IsSuccess = isSuccess;
             Data = data;

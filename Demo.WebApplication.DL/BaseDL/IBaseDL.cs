@@ -23,15 +23,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// author:VietDV(27/3/2023)
         /// </summary>
         /// <returns>Danh sách toàn bộ các bản ghi</returns>
-        public serviceResult GetAllRecords();
-
-        /// <summary>
-        /// Lấy thông tin bản ghi theo id
-        /// author: VietDV(27/3/2023)
-        /// </summary>
-        /// <param name="recordId">id bản ghi muốn lấy thông tin</param>
-        /// <returns>thông tin bản ghi</returns>
-        public serviceResult GetRecordById(Guid recordId);
+        public ServiceResult GetAllRecords();
 
         /// <summary>
         /// Thêm mới thông tin bản ghi
@@ -39,7 +31,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// </summary>
         /// <param name="record">thông tin bản ghi</param>
         /// <returns>trạng thái khi thực hiện câu lệnh sql</returns>
-        public serviceResult InsertRecord(T record);
+        public ServiceResult InsertRecord(T record);
 
         /// <summary>
         /// Cập nhật thông tin bản ghi
@@ -48,7 +40,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// <param name="recordId">id bản ghi muốn cập nhật</param>
         /// <param name="record">thông tin cập nhật</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult UpdateRecord(Guid recordId, T record);
+        public ServiceResult UpdateRecord(Guid recordId, T record);
 
         /// <summary>
         /// Xoá bản ghi theo id 
@@ -56,7 +48,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// </summary>
         /// <param name="recordId">id bản ghi muốn xoá</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult DeleteRecordById(Guid recordId);
+        public ServiceResult DeleteRecordById(Guid recordId);
 
         /// <summary>
         /// Kiểm tra id đã xuất hiện trong DB chưa
@@ -64,7 +56,7 @@ namespace Demo.WebApplication.DL.BaseDL
         /// </summary>
         /// <param name="id">id muốn kiểm tra</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult CheckDuplicateID(string id);
+        public ServiceResult CheckDuplicateID(string id);
 
 
     }

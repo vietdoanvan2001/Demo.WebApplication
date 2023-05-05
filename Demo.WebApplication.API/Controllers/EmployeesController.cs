@@ -34,23 +34,25 @@ namespace Demo.WebApplication.API.Controllers
 
         #region Method
         /// <summary>
-        /// API phân trang và tìm kiếm theo keyword ( Tên nhân viên hoặc mã nhân viên)
-        /// author: VietDV(11/3/2023)
+        /// Phân trang nhân viên
+        /// author:VietDV(26/4/2023)
         /// </summary>
-        /// <param name="keyword">Tên nhân viên hoặc mã nhân viên</param>
-        /// <param name="pageSize">số bản ghi 1 trang</param>
-        /// <param name="pageNumber">trang cần tìm</param>
-        /// <returns>Danh sách nhân viên thoả mãn và tổng số bản ghi thoả mãn</returns>
+        /// <param name="keyword">Tên hoặc mã nhân viên</param>
+        /// <param name="MISACode">Mã phòng ban</param>
+        /// <param name="pageSize">số bản ghi trên trang</param>
+        /// <param name="offSet">vị trí bắt đầu</param>
+        /// <returns>mảng các bản ghi đã lọc</returns>
         [HttpGet("Filter")]
         public IActionResult GetPaging(
             [FromQuery] String? keyword,
+            [FromQuery] String? MISACode,
             [FromQuery] int pageSize = 10,
             [FromQuery] int offSet = 0
             )
         {
             try
             {
-                var pagingData = _employeeBL.GetPaging(keyword, pageSize, offSet);
+                var pagingData = _employeeBL.GetPaging(keyword, MISACode, pageSize, offSet);
                 
                 if (pagingData != null)
                 {
@@ -58,7 +60,7 @@ namespace Demo.WebApplication.API.Controllers
                 }
                 else
                 {
-                    return StatusCode(204, new errorResult
+                    return StatusCode(204, new ErrorResult
                     {
                         ErrorCode = ErrorCode.SqlReturnNull,
                         DevMsg = Resource.ServiceResult_Fail,
@@ -70,7 +72,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,
@@ -99,7 +101,7 @@ namespace Demo.WebApplication.API.Controllers
                 {
                     if (serviceResult.Data == Resource.ServiceResult_Fail)
                     {
-                        return StatusCode(204, new errorResult
+                        return StatusCode(204, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlReturnNull,
                             DevMsg = Resource.ServiceResult_Fail,
@@ -109,7 +111,7 @@ namespace Demo.WebApplication.API.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, new errorResult
+                        return StatusCode(500, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlCatchException,
                             DevMsg = Resource.ServiceResult_Exception,
@@ -122,7 +124,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,
@@ -139,7 +141,7 @@ namespace Demo.WebApplication.API.Controllers
         /// <param name="IDs">Danh sách ID</param>
         /// <returns>1 nếu thành công</returns>
         [HttpDelete("MultipleDelete")]
-        public IActionResult MultipleDelete([FromQuery] multipleDeleteParams IDs)
+        public IActionResult MultipleDelete([FromQuery] MultipleDeleteParams IDs)
         {
             try
             {
@@ -153,7 +155,7 @@ namespace Demo.WebApplication.API.Controllers
                 {
                     if (serviceResult.Data == Resource.ServiceResult_Fail)
                     {
-                        return StatusCode(204, new errorResult
+                        return StatusCode(204, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlReturnNull,
                             DevMsg = Resource.ServiceResult_Fail,
@@ -163,7 +165,7 @@ namespace Demo.WebApplication.API.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, new errorResult
+                        return StatusCode(500, new ErrorResult
                         {
                             ErrorCode = ErrorCode.SqlCatchException,
                             DevMsg = Resource.ServiceResult_Exception,
@@ -177,7 +179,7 @@ namespace Demo.WebApplication.API.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                return StatusCode(500, new errorResult
+                return StatusCode(500, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
                     DevMsg = Resource.DevMsg_Exception,
@@ -192,13 +194,69 @@ namespace Demo.WebApplication.API.Controllers
         /// author: VietDV(27/3/2023)
         /// </summary>
         /// <returns></returns>
-        [HttpGet("Export")]
-        public IActionResult ExcelExport([FromQuery] exportDataParams param)
-        {
-            var stream = _employeeBL.ExcelExport(param);
-            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        //[HttpGet("Export")]
+        //public IActionResult ExcelExport([FromQuery] ExportDataParams param)
+        //{
+        //    var stream = _employeeBL.ExcelExport(param);
+        //    string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
-            return File(stream, "application/vnd.ms-excel", excelName);
+        //    return File(stream, "application/vnd.ms-excel", excelName);
+        //}
+
+        /// <summary>
+        /// API Lấy thông tin chi tiết 1 nhân viên
+        /// Created by: VietDV(09/03/2001)
+        /// </summary>
+        /// <param name="id">ID nhân viên muốn lấy</param>
+        /// <returns>Đối tượng nhân viên</returns>
+        [HttpGet("{id}")]
+        public IActionResult GetEmployeeById([FromRoute] Guid id)
+        {
+            try
+            {
+                var serviceResult = _employeeBL.GetEmployeeById(id);
+
+                if (serviceResult.IsSuccess == true)
+                {
+                    return StatusCode(200, serviceResult.Data);
+                }
+                else
+                {
+                    if (serviceResult.Data == Resource.ServiceResult_Fail)
+                    {
+                        return StatusCode(204, new ErrorResult
+                        {
+                            ErrorCode = ErrorCode.SqlReturnNull,
+                            DevMsg = Resource.ServiceResult_Fail,
+                            UserMsg = Resource.UserMsg_Exception,
+                            TradeId = HttpContext.TraceIdentifier,
+                        });
+                    }
+                    else
+                    {
+                        return StatusCode(500, new ErrorResult
+                        {
+                            ErrorCode = ErrorCode.SqlCatchException,
+                            DevMsg = Resource.ServiceResult_Exception,
+                            UserMsg = Resource.UserMsg_Exception,
+                            TradeId = HttpContext.TraceIdentifier,
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, new ErrorResult
+                {
+                    ErrorCode = ErrorCode.Exception,
+                    DevMsg = Resource.DevMsg_Exception,
+                    UserMsg = Resource.UserMsg_Exception,
+                    TradeId = HttpContext.TraceIdentifier,
+                });
+            }
+
         }
         #endregion
     }

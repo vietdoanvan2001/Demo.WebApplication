@@ -61,6 +61,15 @@ namespace Demo.WebApplication.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1.
+        /// </summary>
+        public static string DefaultMISACode {
+            get {
+                return ResourceManager.GetString("DefaultMISACode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catch an exception.
         /// </summary>
         public static string DevMsg_Exception {
@@ -97,6 +106,15 @@ namespace Demo.WebApplication.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Danh sách nhân viên.
+        /// </summary>
+        public static string Excel_Table_Name {
+            get {
+                return ResourceManager.GetString("Excel_Table_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nữ.
         /// </summary>
         public static string Female {
@@ -124,6 +142,186 @@ namespace Demo.WebApplication.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày nộp đơn.
+        /// </summary>
+        public static string Overtime_ApplyDate {
+            get {
+                return ResourceManager.GetString("Overtime_ApplyDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Người duyệt.
+        /// </summary>
+        public static string Overtime_ApprovalName {
+            get {
+                return ResourceManager.GetString("Overtime_ApprovalName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nghỉ giữa ca từ.
+        /// </summary>
+        public static string Overtime_BreakTimeFrom {
+            get {
+                return ResourceManager.GetString("Overtime_BreakTimeFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nghỉ giữa ca đến.
+        /// </summary>
+        public static string Overtime_BreakTimeTo {
+            get {
+                return ResourceManager.GetString("Overtime_BreakTimeTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đơn vị công tác.
+        /// </summary>
+        public static string Overtime_DepartmentName {
+            get {
+                return ResourceManager.GetString("Overtime_DepartmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ghi chú.
+        /// </summary>
+        public static string Overtime_Description {
+            get {
+                return ResourceManager.GetString("Overtime_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã nhân viên.
+        /// </summary>
+        public static string Overtime_EmployeeCode {
+            get {
+                return ResourceManager.GetString("Overtime_EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Người nộp đơn.
+        /// </summary>
+        public static string Overtime_FullName {
+            get {
+                return ResourceManager.GetString("Overtime_FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thời điểm làm thêm.
+        /// </summary>
+        public static string Overtime_OverTimeInWorkingShiftName {
+            get {
+                return ResourceManager.GetString("Overtime_OverTimeInWorkingShiftName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vị trí công việc.
+        /// </summary>
+        public static string Overtime_PositionName {
+            get {
+                return ResourceManager.GetString("Overtime_PositionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lý do làm thêm.
+        /// </summary>
+        public static string Overtime_Reason {
+            get {
+                return ResourceManager.GetString("Overtime_Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Người liên quan.
+        /// </summary>
+        public static string Overtime_RelationShipNames {
+            get {
+                return ResourceManager.GetString("Overtime_RelationShipNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trạng thái.
+        /// </summary>
+        public static string Overtime_Status {
+            get {
+                return ResourceManager.GetString("Overtime_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Làm thêm đến.
+        /// </summary>
+        public static string Overtime_ToDate {
+            get {
+                return ResourceManager.GetString("Overtime_ToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ca áp dụng.
+        /// </summary>
+        public static string Overtime_WorkingShiftName {
+            get {
+                return ResourceManager.GetString("Overtime_WorkingShiftName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sau ca.
+        /// </summary>
+        public static string OverTimeInWorkingShift_AfterShift {
+            get {
+                return ResourceManager.GetString("OverTimeInWorkingShift_AfterShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trước ca.
+        /// </summary>
+        public static string OverTimeInWorkingShift_BeforeShift {
+            get {
+                return ResourceManager.GetString("OverTimeInWorkingShift_BeforeShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày nghỉ.
+        /// </summary>
+        public static string OverTimeInWorkingShift_DayOff {
+            get {
+                return ResourceManager.GetString("OverTimeInWorkingShift_DayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nghỉ giữa ca.
+        /// </summary>
+        public static string OverTimeInWorkingShift_MiddleShift {
+            get {
+                return ResourceManager.GetString("OverTimeInWorkingShift_MiddleShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Làm thêm từ.
+        /// </summary>
+        public static string Ovettime_FromDate {
+            get {
+                return ResourceManager.GetString("Ovettime_FromDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Execute SQL Command catch Exception.
         /// </summary>
         public static string ServiceResult_Exception {
@@ -147,6 +345,42 @@ namespace Demo.WebApplication.Common {
         public static string ServiceResult_Success {
             get {
                 return ResourceManager.GetString("ServiceResult_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tất cả.
+        /// </summary>
+        public static string Status_All {
+            get {
+                return ResourceManager.GetString("Status_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đã duyệt.
+        /// </summary>
+        public static string Status_Approved {
+            get {
+                return ResourceManager.GetString("Status_Approved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Từ chối.
+        /// </summary>
+        public static string Status_Denied {
+            get {
+                return ResourceManager.GetString("Status_Denied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chờ duyệt.
+        /// </summary>
+        public static string Status_Wait {
+            get {
+                return ResourceManager.GetString("Status_Wait", resourceCulture);
             }
         }
         
@@ -264,6 +498,42 @@ namespace Demo.WebApplication.Common {
         public static string UserMsg_ValidateFailed {
             get {
                 return ResourceManager.GetString("UserMsg_ValidateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ca 1.
+        /// </summary>
+        public static string WorkingShift_FirstCase {
+            get {
+                return ResourceManager.GetString("WorkingShift_FirstCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ca hành chính.
+        /// </summary>
+        public static string WorkingShift_InWork {
+            get {
+                return ResourceManager.GetString("WorkingShift_InWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ca đêm.
+        /// </summary>
+        public static string WorkingShift_NightCase {
+            get {
+                return ResourceManager.GetString("WorkingShift_NightCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ca 2.
+        /// </summary>
+        public static string WorkingShift_SecondCase {
+            get {
+                return ResourceManager.GetString("WorkingShift_SecondCase", resourceCulture);
             }
         }
         

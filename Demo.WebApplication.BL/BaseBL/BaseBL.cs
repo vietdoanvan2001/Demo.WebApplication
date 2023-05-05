@@ -33,7 +33,7 @@ namespace Demo.WebApplication.BL.BaseBL
         /// author:VietDV(27/3/2023)
         /// </summary>
         /// <returns>Danh sách toàn bộ các bản ghi</returns>
-        public serviceResult GetAllRecords()
+        public ServiceResult GetAllRecords()
         {
             return _baseDL.GetAllRecords();
         }
@@ -44,20 +44,9 @@ namespace Demo.WebApplication.BL.BaseBL
         /// </summary>
         /// <param name="recordId">id bản ghi muốn xoá</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult DeleteRecordById(Guid recordId)
+        public ServiceResult DeleteRecordById(Guid recordId)
         {
             return _baseDL.DeleteRecordById(recordId);
-        }
-
-        /// <summary>
-        /// Lấy thông tin bản ghi theo id
-        /// author: VietDV(27/3/2023)
-        /// </summary>
-        /// <param name="recordId">id bản ghi muốn lấy thông tin</param>
-        /// <returns>thông tin bản ghi</returns>
-        public serviceResult GetRecordById(Guid recordId)
-        {
-            return _baseDL.GetRecordById(recordId);
         }
 
         /// <summary>
@@ -67,7 +56,7 @@ namespace Demo.WebApplication.BL.BaseBL
         /// <param name="recordId">id bản ghi muốn cập nhật</param>
         /// <param name="record">thông tin cập nhật</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult UpdateRecord(Guid recordId, T record)
+        public ServiceResult UpdateRecord(Guid recordId, T record)
         {
 
             var validateFailures = ValidateRecord(record);
@@ -75,17 +64,26 @@ namespace Demo.WebApplication.BL.BaseBL
 
             if (validateFailures.Count > 0)
             {
-                return new serviceResult(false, validateFailures);
+                return new ServiceResult(false, validateFailures);
             }
 
             var validateFailuresCustom = ValidateRecordCustom(record, false);
 
             if(validateFailuresCustom.Count > 0)
             {
-                return new serviceResult(false, validateFailuresCustom);
+                return new ServiceResult(false, validateFailuresCustom);
             }
 
-            return _baseDL.UpdateRecord(recordId, record);
+            var response = _baseDL.UpdateRecord(recordId, record);
+            if(response.IsSuccess == true)
+            {
+                InsertDetailData(record, recordId);
+                return response;
+            }
+            else
+            {
+                return response;
+            }
             
             
         }
@@ -96,23 +94,33 @@ namespace Demo.WebApplication.BL.BaseBL
         /// </summary>
         /// <param name="record">thông tin bản ghi</param>
         /// <returns>trạng thái khi thực hiện câu lệnh sql</returns>
-        public serviceResult InsertRecord(T record)
+        public ServiceResult InsertRecord(T record)
         {
             var validatefailures = ValidateRecord(record);
 
             if (validatefailures.Count > 0)
             {
-                return new serviceResult(false, validatefailures);
+                return new ServiceResult(false, validatefailures);
             }
 
             var validateFailuresCustom = ValidateRecordCustom(record, true);
 
             if (validateFailuresCustom.Count > 0)
             {
-                return new serviceResult(false, validateFailuresCustom);
+                return new ServiceResult(false, validateFailuresCustom);
             }
 
-            return _baseDL.InsertRecord(record);
+            var res = _baseDL.InsertRecord(record);
+
+            if(res.IsSuccess == true)
+            {
+                InsertDetailData(record,(Guid)res.Data);
+                return res;
+            }
+            else
+            {
+                return res;
+            }
 
         }
 
@@ -122,9 +130,9 @@ namespace Demo.WebApplication.BL.BaseBL
         /// </summary>
         /// <param name="record">form body thông tin cần validate</param>
         /// <returns>Danh sách lỗi</returns>
-        public List<errorResult> ValidateRecord(T record)
+        public List<ErrorResult> ValidateRecord(T record)
         {
-            var validateFailures = new List<errorResult>();
+            var validateFailures = new List<ErrorResult>();
             var properties = typeof(T).GetProperties();
 
             foreach (var property in properties)
@@ -134,9 +142,9 @@ namespace Demo.WebApplication.BL.BaseBL
                 var requiredAttribute = (NotEmptyAttribute?)property.GetCustomAttributes(typeof(NotEmptyAttribute), false).FirstOrDefault();
 
                 //Validate các trường bắt buộc
-                if (requiredAttribute != null && propertyValue != null && String.IsNullOrEmpty(propertyValue.ToString()))
+                if (requiredAttribute != null && String.IsNullOrEmpty(propertyValue?.ToString()))
                 {
-                    validateFailures.Add( new errorResult {
+                    validateFailures.Add( new ErrorResult {
                             ErrorField = propertyName,
                             ErrorCode = ErrorCode.InvalidData,
                             DevMsg = Resource.Error_InvalidData,
@@ -156,9 +164,16 @@ namespace Demo.WebApplication.BL.BaseBL
         /// <param name="record">form body thông tin cần validate</param>
         /// <param name="isInsert">cờ xác định xem có phải API thêm mới không</param>
         /// <returns></returns>
-        public virtual List<errorResult> ValidateRecordCustom(T record, bool isInsert)
+        public virtual List<ErrorResult> ValidateRecordCustom(T record, bool isInsert)
         {
-            return new List<errorResult>();
+            return new List<ErrorResult>();
         }
+
+        /// <summary>
+        /// hàm thêm thông tin vào bảng detail
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="recordId"></param>
+        public virtual void InsertDetailData(T record, Guid id) { }
     }
 }

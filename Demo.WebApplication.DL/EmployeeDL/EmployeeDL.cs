@@ -31,7 +31,7 @@ namespace Demo.WebApplication.DL.EmployeeDL
         /// author: VietDV(27/3/2023)
         /// </summary>
         /// <returns>mã nhân viên lớn nhất trong db</returns>
-        public serviceResult GetNewEmployeeCode()
+        public ServiceResult GetNewEmployeeCode()
         {
             //chuẩn bị tên stored
             String storedProcedureName = "Proc_Employee_NewEmployeeCode";
@@ -49,32 +49,37 @@ namespace Demo.WebApplication.DL.EmployeeDL
 
                 if (res != null)
                 {
-                    return new serviceResult(true, res);
+                    return new ServiceResult(true, res);
                 }
                 else 
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
             catch (Exception)
             {
 
-                return new serviceResult(false, Resource.ServiceResult_Exception);
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
 
         }
 
         /// <summary>
-        /// Lấy thông tin phân trang nhân viên
-        /// author: VietDV(27/3/2023)
+        /// Phân trang nhân viên
+        /// author:VietDV(26/4/2023)
         /// </summary>
-        /// <param name="keyword">từ khoá tìm kiếm(tìm kiếm theo tên nhân viên hoặc mã nhân viên)</param>
-        /// <param name="pageSize">số bản ghi trên 1 trang</param>
-        /// <param name="offSet">thứ tự bản ghi bắt đầu của trang</param>
-        /// <returns>danh sách các nhân viên thoả mãn</returns>
-        /// <returns>tổng số nhân viên trong db</returns>
-        public Dictionary<string, object> GetPaging(string? keyword, int pageSize = 10, int offSet = 0) 
+        /// <param name="keyword">Tên hoặc mã nhân viên</param>
+        /// <param name="MISACode">Mã phòng ban</param>
+        /// <param name="pageSize">số bản ghi trên trang</param>
+        /// <param name="offSet">vị trí bắt đầu</param>
+        /// <returns>mảng các bản ghi đã lọc</returns>
+        public Dictionary<string, object> GetPaging(string? keyword, string? MISACode, int pageSize = 10, int offSet = 0) 
         {
+            if(MISACode == null)
+            {
+                MISACode = Resource.DefaultMISACode;
+            }
+
             //chuẩn bị tên stored
             String storedProcedureName = "Proc_Employee_Filter";
 
@@ -83,6 +88,7 @@ namespace Demo.WebApplication.DL.EmployeeDL
             paprameters.Add("v_Where", keyword);
             paprameters.Add("v_Offset", offSet);
             paprameters.Add("v_Limit", pageSize);
+            paprameters.Add("v_MISACode", MISACode);
 
             //kết nối tới database
             var dbConnection = GetOpenConnection();
@@ -113,39 +119,46 @@ namespace Demo.WebApplication.DL.EmployeeDL
         /// </summary>
         /// <param name="IDs">Danh sách các id nhân viên muốn xoá</param>
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
-        public serviceResult MultipleDelete(string IDs)
+        public ServiceResult MultipleDelete(string IDs)
         {
-            //chuẩn bị tên stored
-            String storedProcedureName = "Proc_Employee_MultipleDelete";
-
-            //chuẩn bị tham số đầu vào
-            var paprameters = new DynamicParameters();
-            paprameters.Add("v_IDs", IDs);
+            var affectedRow = 0;
 
             //kết nối tới database
-            var dbConnection = GetOpenConnection();
-
-            try
+            using (var dbConnection  = GetOpenConnection())
             {
-                //thực hiện câu lệnh sql
-                var affectedRow = dbConnection.QueryFirstOrDefault<int>(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
+                var tran = dbConnection.BeginTransaction();
 
-                //đóng kết nối tới database
-                dbConnection.Close();
+                //chuẩn bị tên stored
+                String storedProcedureName = "Proc_Employee_MultipleDelete";
+
+                //chuẩn bị tham số đầu vào
+                var paprameters = new DynamicParameters();
+                paprameters.Add("v_IDs", IDs);
+
+                try
+                {
+                    //thực hiện câu lệnh sql
+                    affectedRow = dbConnection.QueryFirstOrDefault<int>(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure, transaction:tran);
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                }
+                finally 
+                { 
+                    dbConnection.Close();
+                }
 
                 if (affectedRow > 0)
                 {
-                    return new serviceResult(true, Resource.ServiceResult_Success);
+                    return new ServiceResult(true, Resource.ServiceResult_Success);
                 }
                 else
                 {
-                    return new serviceResult(false, Resource.ServiceResult_Fail);
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
-            }
-            catch (Exception)
-            {
 
-                return new serviceResult(false, Resource.ServiceResult_Exception);
             }
 
         }
@@ -155,21 +168,64 @@ namespace Demo.WebApplication.DL.EmployeeDL
         /// Author: VietDV(27/3/2023)
         /// </summary>
         /// <returns></returns>
-        public List<Employee> ExcelExport(exportDataParams param)
+        //public List<Employee> ExcelExport(ExportDataParams param)
+        //{
+        //    try
+        //    {
+
+        //        var FileData = GetPaging(param.keyword, param.total, 0);
+        //        List<Employee> AllData = (List<Employee>)FileData["PageData"];
+        //        return AllData;
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+
+        //}
+
+        /// <summary>
+        /// Lấy thông tin bản ghi theo id
+        /// author: VietDV(27/3/2023)
+        /// </summary>
+        /// <param name="recordId">id bản ghi muốn lấy thông tin</param>
+        /// <returns>thông tin bản ghi</returns>
+        public ServiceResult GetEmployeeById(Guid recordId)
         {
+            //chuẩn bị tên stored
+            String storedProcedureName = $"Proc_Employee_GetById";
+
+            //chuẩn bị tham số đầu vào
+            var paprameters = new DynamicParameters();
+            paprameters.Add($"v_EmployeeId", recordId);
+
+            //khởi tạo kết nối tới DB
+
+            var dbConnection = GetOpenConnection();
+
+
+            //thực hiện câu lệnh sql
             try
             {
+                Employee record = dbConnection.QueryFirstOrDefault<Employee>(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
 
-                var FileData = GetPaging(param.keyword, param.total, 0);
-                List<Employee> AllData = (List<Employee>)FileData["PageData"];
-                return AllData;
+                dbConnection.Close();
+
+                if (record != null)
+                {
+                    return new ServiceResult(true, record);
+                }
+                else
+                {
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw;
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
-
         }
         #endregion
     }
