@@ -58,6 +58,6 @@ namespace Demo.WebApplication.DL.BaseDL
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
         public ServiceResult CheckDuplicateID(string id);
 
-
+        
     }
 }

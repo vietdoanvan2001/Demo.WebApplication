@@ -113,41 +113,57 @@ namespace Demo.WebApplication.DL.BaseDL
         /// <returns>trạng thái khi thực hiện câu lệnh sql</returns>
         public ServiceResult InsertRecord(T record)
         {
-            Guid recordId = Guid.NewGuid();
-            //chuẩn bị tên stored
-            String storedProcedureName = $"Proc_{typeof(T).Name}_Insert";
+            var affectedRow = 0;
 
-            //chuẩn bị tham số đầu vào
-            var paprameters = new DynamicParameters();
-
-            var properties = typeof(T).GetProperties();
-            foreach (var property in properties)
+            //kết nối tới database
+            using (var dbConnection = GetOpenConnection())
             {
-                var primaryKey = (PrimaryKeyAttribute?)property.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault();
-                var id = (IdAttribute?)property.GetCustomAttributes(typeof(IdAttribute), false).FirstOrDefault();
-                var currentTime = (CurrentTimeAttribute?)property.GetCustomAttributes(typeof(CurrentTimeAttribute), false).FirstOrDefault();
+                var tran = dbConnection.BeginTransaction();
 
-                if (id != null)
-                {
-                    paprameters.Add($"v_{property.Name}", recordId);
-                }
-                if (currentTime != null)
-                {
-                    paprameters.Add($"v_{property.Name}", DateTime.Now);
-                }
-                if (currentTime == null && primaryKey == null && id == null)
-                {
-                    paprameters.Add($"v_{property.Name}", property.GetValue(record));
-                }
-            }
+                Guid recordId = Guid.NewGuid();
+                //chuẩn bị tên stored
+                String storedProcedureName = $"Proc_{typeof(T).Name}_Insert";
 
-            //Khởi tạo kết nối với DB
-            var dbConnection = GetOpenConnection();
+                //chuẩn bị tham số đầu vào
+                var paprameters = new DynamicParameters();
 
-            //thực hiện câu lệnh sql
-            try
-            {
-                var affectedRow = dbConnection.Execute(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
+                var properties = typeof(T).GetProperties();
+                foreach (var property in properties)
+                {
+                    var primaryKey = (PrimaryKeyAttribute?)property.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault();
+                    var id = (IdAttribute?)property.GetCustomAttributes(typeof(IdAttribute), false).FirstOrDefault();
+                    var currentTime = (CurrentTimeAttribute?)property.GetCustomAttributes(typeof(CurrentTimeAttribute), false).FirstOrDefault();
+
+                    if (id != null)
+                    {
+                        paprameters.Add($"v_{property.Name}", recordId);
+                    }
+                    if (currentTime != null)
+                    {
+                        paprameters.Add($"v_{property.Name}", DateTime.Now);
+                    }
+                    if (currentTime == null && primaryKey == null && id == null)
+                    {
+                        paprameters.Add($"v_{property.Name}", property.GetValue(record));
+                    }
+                }
+
+
+                //thực hiện câu lệnh sql
+                try
+                {
+                    affectedRow = dbConnection.Execute(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure, transaction: tran);
+
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                }
+                finally
+                {
+                    dbConnection.Close();
+                }
 
                 if (affectedRow > 0)
                 {
@@ -157,11 +173,6 @@ namespace Demo.WebApplication.DL.BaseDL
                 {
                     return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
-            }
-            catch (Exception)
-            {
-
-                return new ServiceResult(false, Resource.ServiceResult_Exception);
             }
 
         }
@@ -175,40 +186,54 @@ namespace Demo.WebApplication.DL.BaseDL
         /// <returns>trạng thái thực hiện câu lệnh sql</returns>
         public ServiceResult UpdateRecord(Guid recordId, T record)
         {
-            //chuẩn bị tên stored
-            String storedProcedureName = $"Proc_{typeof(T).Name}_Update";
+            var affectedRow = 0;
 
-            //chuẩn bị tham số đầu vào
-            var paprameters = new DynamicParameters();
-
-            var properties = typeof(T).GetProperties();
-            foreach (var property in properties)
+            //kết nối tới database
+            using (var dbConnection = GetOpenConnection())
             {
-                var primaryKey = (PrimaryKeyAttribute?)property.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault();
-                var currentTime = (CurrentTimeAttribute?)property.GetCustomAttributes(typeof(CurrentTimeAttribute), false).FirstOrDefault();
+                var tran = dbConnection.BeginTransaction();
 
-                if(primaryKey != null)
+                //chuẩn bị tên stored
+                String storedProcedureName = $"Proc_{typeof(T).Name}_Update";
+
+                //chuẩn bị tham số đầu vào
+                var paprameters = new DynamicParameters();
+
+                var properties = typeof(T).GetProperties();
+                foreach (var property in properties)
                 {
-                    paprameters.Add($"v_{property.Name}", recordId);
+                    var primaryKey = (PrimaryKeyAttribute?)property.GetCustomAttributes(typeof(PrimaryKeyAttribute), false).FirstOrDefault();
+                    var currentTime = (CurrentTimeAttribute?)property.GetCustomAttributes(typeof(CurrentTimeAttribute), false).FirstOrDefault();
+
+                    if (primaryKey != null)
+                    {
+                        paprameters.Add($"v_{property.Name}", recordId);
+                    }
+                    if (currentTime != null)
+                    {
+                        paprameters.Add($"v_{property.Name}", DateTime.Now);
+                    }
+                    if (currentTime == null && primaryKey == null)
+                    {
+                        paprameters.Add($"v_{property.Name}", property.GetValue(record));
+                    }
                 }
-                if(currentTime != null)
+
+                //thực hiện câu lệnh sql
+                try
                 {
-                    paprameters.Add($"v_{property.Name}", DateTime.Now);
+                    affectedRow = dbConnection.Execute(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure, transaction: tran);
+
+                    tran.Commit();
                 }
-                if(currentTime == null && primaryKey == null)
+                catch (Exception)
                 {
-                    paprameters.Add($"v_{property.Name}",property.GetValue(record));
+                    tran.Rollback();
                 }
-            }   
-
-
-            var dbConnection = GetOpenConnection();
-
-            //thực hiện câu lệnh sql
-            try
-            {
-                var affectedRow = dbConnection.Execute(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
-
+                finally
+                {
+                    dbConnection.Close();
+                }
                 if (affectedRow > 0)
                 {
                     return new ServiceResult(true, Resource.ServiceResult_Success);
@@ -218,11 +243,7 @@ namespace Demo.WebApplication.DL.BaseDL
                     return new ServiceResult(false, Resource.ServiceResult_Fail);
                 }
             }
-            catch (Exception)
-            {
-
-                return new ServiceResult(false, Resource.ServiceResult_Exception);
-            }
+                
         }
 
         /// <summary>

@@ -59,14 +59,14 @@ namespace Demo.WebApplication.BL.OverTimeBL
         /// </summary>
         /// <param name="param">truy vấn lọc</param>
         /// <returns>Danh sách bản ghi thoả mãn</returns>
-        public MemoryStream ExcelExport(OverTimesExportDataParams param);
+        public MemoryStream ExcelExport(ExportBody body);
 
         /// <summary>
-        /// Xuất khẩu các dữ liệu làm thêm được chọn
-        /// author: VietDV(30/4/2023)
+        /// Xuất khẩu dữ liệu đơn làm thêm được chọn
+        /// author: VietDV(5/5/2023)
         /// </summary>
-        /// <param name="param">Danh sách các bản ghi</param>
-        /// <returns>File excel</returns>
-        public MemoryStream ExcelExportSelected(List<OverTime> listOverTimes);
+        /// <param name="param">danh sách id các đơn được chọn</param>
+        /// <returns>Danh sách bản ghi thoả mãn</returns>
+        public MemoryStream ExcelExportSelected(String IDs, List<HeaderType> header);
     }
 }

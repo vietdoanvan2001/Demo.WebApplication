@@ -69,10 +69,10 @@ namespace Demo.WebApplication.BL.BaseBL
 
             var validateFailuresCustom = ValidateRecordCustom(record, false);
 
-            if(validateFailuresCustom.Count > 0)
-            {
-                return new ServiceResult(false, validateFailuresCustom);
-            }
+            //if(validateFailuresCustom.Count > 0)
+            //{
+            //    return new ServiceResult(false, validateFailuresCustom);
+            //}
 
             var response = _baseDL.UpdateRecord(recordId, record);
             if(response.IsSuccess == true)

@@ -287,5 +287,77 @@ namespace Demo.WebApplication.DL.OverTimeDL
             }
 
         }
+
+        /// <summary>
+        /// Xuất khẩu dữ liệu đơn làm thêm được chọn
+        /// author: VietDV(5/5/2023)
+        /// </summary>
+        /// <param name="param">danh sách id các đơn được chọn</param>
+        /// <returns>Danh sách bản ghi thoả mãn</returns>
+        public List<OverTime> ExcelExportSelected(String IDs)
+        {
+
+            //chuẩn bị tên stored
+            String storedProcedureName = "Proc_OverTime_SelectedByListIDs";
+
+            //chuẩn bị tham số đầu vào
+            var paprameters = new DynamicParameters();
+            paprameters.Add("v_IDs", IDs);
+
+            //kết nối tới database
+            var dbConnection = GetOpenConnection();
+            try
+            {
+                //thực hiện câu lệnh sql
+                var listOverTimes = dbConnection.Query<OverTime>(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
+                
+                return (List<OverTime>)listOverTimes;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+
+        }
+
+        public ServiceResult CheckOverTimeDuplicate(OverTime record)
+        {
+            //chuẩn bị tên stored
+            String storedProcedureName = $"Proc_OverTime_CheckDuplicate";
+
+            //chuẩn bị tham số đầu vào
+            var paprameters = new DynamicParameters();
+            paprameters.Add($"v_EmployeeId", record.EmployeeId);
+            paprameters.Add($"v_FromDate", record.FromDate);
+            paprameters.Add($"v_ToDate", record.ToDate);
+
+            //khởi tạo kết nối tới DB
+
+            var dbConnection = GetOpenConnection();
+
+
+            //thực hiện câu lệnh sql
+            try
+            {
+                OverTime affectedRow = dbConnection.QueryFirstOrDefault<OverTime>(storedProcedureName, paprameters, commandType: System.Data.CommandType.StoredProcedure);
+
+                dbConnection.Close();
+
+                if (affectedRow == null)
+                {
+                    return new ServiceResult(true, Resource.ServiceResult_Success);
+                }
+                else
+                {
+                    return new ServiceResult(false, Resource.ServiceResult_Fail);
+                }
+            }
+            catch (Exception)
+            {
+
+                return new ServiceResult(false, Resource.ServiceResult_Exception);
+            }
+        }
     }
 }

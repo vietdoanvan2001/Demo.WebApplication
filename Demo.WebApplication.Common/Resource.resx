@@ -187,6 +187,9 @@
   <data name="Overtime_Description" xml:space="preserve">
     <value>Ghi chú</value>
   </data>
+  <data name="OverTime_Duplicate" xml:space="preserve">
+    <value>Đơn đăng ký làm thêm đã tồn tại. Vui lòng kiểm tra lại.</value>
+  </data>
   <data name="Overtime_EmployeeCode" xml:space="preserve">
     <value>Mã nhân viên</value>
   </data>

@@ -17,7 +17,9 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static Demo.WebApplication.Common.Attibutes.Attributes;
 
 namespace Demo.WebApplication.BL.OverTimeBL
 {
@@ -38,7 +40,10 @@ namespace Demo.WebApplication.BL.OverTimeBL
             _overTimeDL = overTimeDL;
             _overTimeDetailBL = overTimeDetailBL;
         }
-
+        public OverTimeBL(IOverTimeDL overTimeDL) : base(overTimeDL)
+        {
+            _overTimeDL = overTimeDL;
+        }
         #endregion
 
         #region Method
@@ -189,33 +194,43 @@ namespace Demo.WebApplication.BL.OverTimeBL
         /// </summary>
         /// <param name="param">truy vấn lọc</param>
         /// <returns>Danh sách bản ghi thoả mãn</returns>
-        public MemoryStream ExcelExport(OverTimesExportDataParams param)
+        public MemoryStream ExcelExport(ExportBody body)
         {
             // Gọi vào xuất dữ liệu trong BaseDL
-            var data = _overTimeDL.ExcelExport(param);
+            var data = _overTimeDL.ExcelExport(body.param);
             if (data != null)
             {
                 List<OverTime> missionallowances = new List<OverTime>();
 
                 missionallowances = (List<OverTime>)data;
 
-                return OverTimeExport(missionallowances);
+                return OverTimeExport(missionallowances,body.header);
             }
             return new MemoryStream();
         }
 
         /// <summary>
-        /// Xuất khẩu các dữ liệu làm thêm được chọn
-        /// author: VietDV(30/4/2023)
+        /// Xuất khẩu dữ liệu đơn làm thêm được chọn
+        /// author: VietDV(5/5/2023)
         /// </summary>
-        /// <param name="param">Danh sách các bản ghi</param>
-        /// <returns>File excel</returns>
-        public MemoryStream ExcelExportSelected(List<OverTime> listOverTimes)
+        /// <param name="param">danh sách id các đơn được chọn</param>
+        /// <returns>Danh sách bản ghi thoả mãn</returns>
+        public MemoryStream ExcelExportSelected(String IDs, List<HeaderType> header)
         {
-           return OverTimeExport(listOverTimes);
+           var response = _overTimeDL.ExcelExportSelected(IDs);
+            if (response != null)
+            {
+                return OverTimeExport(response, header);
+            }
+            return new MemoryStream();
         }
 
-        public MemoryStream OverTimeExport(List<OverTime> missionallowances)
+        /// <summary>
+        /// Hàm xuất file excel
+        /// </summary>
+        /// <param name="missionallowances"></param>
+        /// <returns></returns>
+        public MemoryStream OverTimeExport(List<OverTime> missionallowances, List<HeaderType> header)
         {
             {
                 //gán tên thời điểm làm thêm, tên ca áp dụng, tên trạng thái
@@ -275,6 +290,53 @@ namespace Demo.WebApplication.BL.OverTimeBL
                     }
                 }
 
+                var listCaption = new string[header.Count];
+                var listDataField = new string[header.Count];
+                var listHeader = new int[header.Count];
+                var letters = new char[listHeader.Length];
+
+                var numberI = 0;
+
+                for(int i = 0; i< header.Count; i++)
+                {
+                    if (header[i].isDisplay)
+                    {
+                        numberI++;
+                        listHeader[i] = numberI;
+                        listCaption[i] = header[i].caption;
+                        listDataField[i] = header[i].dataField;
+                    }
+                }
+
+                for(int i=0; i<listHeader.Length; i++)
+                {
+                    if (listHeader[i] != 0)
+                    {
+                        letters[i] = (char)(listHeader[i] + 64);
+                    }
+                    else
+                    {
+                        letters[i] = letters[i];
+                    }
+                }
+
+                var numberRow = string.Join(",", listHeader);
+                var number = numberRow.Replace(",0", "");
+                var listNumber = number.Split(',');
+                Array.Resize(ref listNumber, listNumber.Length - 1);
+                var listRow = string.Join(",", letters);
+                var list = listRow.Replace("\0,", "");
+                var listAlphabet = list.Split(',');
+                Array.Resize(ref listAlphabet, listAlphabet.Length - 1);
+                var captions = listCaption.Where(item => item != null).ToList();
+                var dataField = listDataField.Where(item => item != null).ToList();
+                var nameExcel = new String[listAlphabet.Length];
+                
+                for(int i=0; i<listAlphabet.Length; i++)
+                {
+                    nameExcel[i] = (string)(listAlphabet[i]+'3');
+                }
+
                 var stream = new MemoryStream();
 
                 using (var xlPackage = new ExcelPackage(stream))
@@ -287,7 +349,8 @@ namespace Demo.WebApplication.BL.OverTimeBL
                     worksheet.Cells["A1"].Value = "Danh sách đơn đăng ký làm thêm";
 
                     // Hợp cột A1 -> J1 của dòng 1 trong sheet Danh_sach_don_cong_tac
-                    using (var r = worksheet.Cells["A1:Q1"])
+                    //using (var r = worksheet.Cells["A1:Q1"])
+                    using (var r = worksheet.Cells[listAlphabet[0]+"1:"+listAlphabet[listAlphabet.Length-1]+"1"])
                     {
                         r.Merge = true;
 
@@ -300,11 +363,13 @@ namespace Demo.WebApplication.BL.OverTimeBL
                         r.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     }
 
-                    using (var r = worksheet.Cells["A2:Q2"])
+                    //using (var r = worksheet.Cells["A2:Q2"])
+                    using (var r = worksheet.Cells[listAlphabet[0] + "2:" + listAlphabet[listAlphabet.Length - 1] + "2"])
                     {
                         r.Merge = true;
                     }
-                    using (var r = worksheet.Cells["A3:Q3"])
+                    //using (var r = worksheet.Cells["A3:Q3"])
+                    using (var r = worksheet.Cells[listAlphabet[0] + "3:" + listAlphabet[listAlphabet.Length - 1] + "3"])
                     {
                         // Định dạng kiểu chữ
                         r.Style.Font.Size = 12;
@@ -322,41 +387,51 @@ namespace Demo.WebApplication.BL.OverTimeBL
                         r.Style.Border.Right.Style = ExcelBorderStyle.Thin;
                         r.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                     }
-                    worksheet.Cells["A3"].Value = "STT";
-                    worksheet.Cells["B3"].Value = "Mã nhân viên";
-                    worksheet.Cells["C3"].Value = "Người nộp đơn";
-                    worksheet.Cells["D3"].Value = "Vị trí công việc";
-                    worksheet.Cells["E3"].Value = "Đơn vị công tác";
-                    worksheet.Cells["F3"].Value = "Ngày nộp đơn";
-                    worksheet.Cells["G3"].Value = "Làm thêm từ";
-                    worksheet.Cells["H3"].Value = "Làm thêm đến";
-                    worksheet.Cells["I3"].Value = "Nghỉ giữa ca từ";
-                    worksheet.Cells["J3"].Value = "Nghỉ giữa ca đến";
-                    worksheet.Cells["K3"].Value = "Thời điểm làm thêm";
-                    worksheet.Cells["L3"].Value = "Ca áp dụng";
-                    worksheet.Cells["M3"].Value = "Lý do làm thêm";
-                    worksheet.Cells["N3"].Value = "Người duyệt";
-                    worksheet.Cells["O3"].Value = "Người liên quan";
-                    worksheet.Cells["P3"].Value = "Ghi chú";
-                    worksheet.Cells["Q3"].Value = "Trạng thái";
+                    //worksheet.Cells["A3"].Value = "STT";
+                    //worksheet.Cells["B3"].Value = "Mã nhân viên";
+                    //worksheet.Cells["C3"].Value = "Người nộp đơn";
+                    //worksheet.Cells["D3"].Value = "Vị trí công việc";
+                    //worksheet.Cells["E3"].Value = "Đơn vị công tác";
+                    //worksheet.Cells["F3"].Value = "Ngày nộp đơn";
+                    //worksheet.Cells["G3"].Value = "Làm thêm từ";
+                    //worksheet.Cells["H3"].Value = "Làm thêm đến";
+                    //worksheet.Cells["I3"].Value = "Nghỉ giữa ca từ";
+                    //worksheet.Cells["J3"].Value = "Nghỉ giữa ca đến";
+                    //worksheet.Cells["K3"].Value = "Thời điểm làm thêm";
+                    //worksheet.Cells["L3"].Value = "Ca áp dụng";
+                    //worksheet.Cells["M3"].Value = "Lý do làm thêm";
+                    //worksheet.Cells["N3"].Value = "Người duyệt";
+                    //worksheet.Cells["O3"].Value = "Người liên quan";
+                    //worksheet.Cells["P3"].Value = "Ghi chú";
+                    //worksheet.Cells["Q3"].Value = "Trạng thái";
+                    
+                    for(int i=0; i< listAlphabet.Length; i++)
+                    {
+                        worksheet.Cells[nameExcel[i]].Value = captions[i];
+                    }
 
-                    worksheet.Column(1).Width = 6;
-                    worksheet.Column(2).Width = 20;
-                    worksheet.Column(3).Width = 30;
-                    worksheet.Column(4).Width = 20;
-                    worksheet.Column(5).Width = 50;
-                    worksheet.Column(6).Width = 25;
-                    worksheet.Column(7).Width = 25;
-                    worksheet.Column(8).Width = 25;
-                    worksheet.Column(9).Width = 25;
-                    worksheet.Column(10).Width = 25;
-                    worksheet.Column(11).Width = 25;
-                    worksheet.Column(12).Width = 25;
-                    worksheet.Column(13).Width = 30;
-                    worksheet.Column(14).Width = 25;
-                    worksheet.Column(15).Width = 60;
-                    worksheet.Column(16).Width = 25;
-                    worksheet.Column(17).Width = 25;
+
+                    //worksheet.Column(1).Width = 30;
+                    //worksheet.Column(2).Width = 30;
+                    //worksheet.Column(3).Width = 30;
+                    //worksheet.Column(4).Width = 30;
+                    //worksheet.Column(5).Width = 30;
+                    //worksheet.Column(6).Width = 30;
+                    //worksheet.Column(7).Width = 30;
+                    //worksheet.Column(8).Width = 30;
+                    //worksheet.Column(9).Width = 30;
+                    //worksheet.Column(10).Width = 30;
+                    //worksheet.Column(11).Width = 30;
+                    //worksheet.Column(12).Width = 30;
+                    //worksheet.Column(13).Width = 30;
+                    //worksheet.Column(14).Width = 30;
+                    //worksheet.Column(15).Width = 30;
+                    //worksheet.Column(16).Width = 30;
+                    //worksheet.Column(17).Width = 30;
+                    //for(int i=0; i < listAlphabet.Length; i++)
+                    //{
+                    //    worksheet.Column(i + 1).Width = 45;
+                    //}
 
                     int row = 4;
                     int STT = 1;
@@ -364,32 +439,110 @@ namespace Demo.WebApplication.BL.OverTimeBL
                     int end = 4;
                     foreach (var entity in missionallowances)
                     {
-                        worksheet.Cells[row, 1].Value = STT++;
-                        worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[row, 2].Value = entity.EmployeeCode;
-                        worksheet.Cells[row, 3].Value = entity.FullName;
-                        worksheet.Cells[row, 4].Value = entity.PositionName;
-                        worksheet.Cells[row, 5].Value = entity.DepartmentName;
-                        worksheet.Cells[row, 6].Value = entity.ApplyDate?.ToString("dd/MM/yyyy hh:mm");
-                        worksheet.Cells[row, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[row, 7].Value = entity.FromDate?.ToString("dd/MM/yyyy hh:mm");
-                        worksheet.Cells[row, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[row, 8].Value = entity.ToDate?.ToString("dd/MM/yyyy hh:mm");
-                        worksheet.Cells[row, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[row, 9].Value = entity.BreakTimeFrom?.ToString("dd/MM/yyyy hh:mm");
-                        worksheet.Cells[row, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[row, 10].Value = entity.BreakTimeTo?.ToString("dd/MM/yyyy hh:mm");
-                        worksheet.Cells[row, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[row, 11].Value = entity.OverTimeInWorkingShift;
-                        worksheet.Cells[row, 12].Value = entity.WorkingShift;
-                        worksheet.Cells[row, 13].Value = entity.Reason;
-                        worksheet.Cells[row, 14].Value = entity.ApprovalName;
-                        worksheet.Cells[row, 15].Value = entity.RelationShipNames;
-                        worksheet.Cells[row, 16].Value = entity.Description;
-                        worksheet.Cells[row, 17].Value = entity.StatusName;
+                        //worksheet.Cells[row, 1].Value = STT++;
+                        //worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        //worksheet.Cells[row, 2].Value = entity.EmployeeCode;
+                        //worksheet.Cells[row, 3].Value = entity.FullName;
+                        //worksheet.Cells[row, 4].Value = entity.PositionName;
+                        //worksheet.Cells[row, 5].Value = entity.DepartmentName;
+                        //worksheet.Cells[row, 6].Value = entity.ApplyDate?.ToString("dd/MM/yyyy hh:mm");
+                        //worksheet.Cells[row, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        //worksheet.Cells[row, 7].Value = entity.FromDate?.ToString("dd/MM/yyyy hh:mm");
+                        //worksheet.Cells[row, 7].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        //worksheet.Cells[row, 8].Value = entity.ToDate?.ToString("dd/MM/yyyy hh:mm");
+                        //worksheet.Cells[row, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        //worksheet.Cells[row, 9].Value = entity.BreakTimeFrom?.ToString("dd/MM/yyyy hh:mm");
+                        //worksheet.Cells[row, 9].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        //worksheet.Cells[row, 10].Value = entity.BreakTimeTo?.ToString("dd/MM/yyyy hh:mm");
+                        //worksheet.Cells[row, 10].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        //worksheet.Cells[row, 11].Value = entity.OverTimeInWorkingShift;
+                        //worksheet.Cells[row, 12].Value = entity.WorkingShift;
+                        //worksheet.Cells[row, 13].Value = entity.Reason;
+                        //worksheet.Cells[row, 14].Value = entity.ApprovalName;
+                        //worksheet.Cells[row, 15].Value = entity.RelationShipNames;
+                        //worksheet.Cells[row, 16].Value = entity.Description;
+                        //worksheet.Cells[row, 17].Value = entity.StatusName;
+                        for(var i = 0; i< dataField.Count; i++)
+                        {
+                            var field = dataField[i];
+                            switch(field)
+                            {
+                                case "EmployeeCode":
+                                    worksheet.Cells[row, i + 1].Value = entity.EmployeeCode;
+                                    worksheet.Column(i + 1).Width = 25;
+                                    break;
+                                case "FullName":
+                                    worksheet.Cells[row, i + 1].Value = entity.FullName;
+                                    worksheet.Column(i + 1).Width = 40;
+                                    break;
+                                case "PositionName":
+                                    worksheet.Cells[row, i + 1].Value = entity.PositionName;
+                                    worksheet.Column(i + 1).Width = 40;
+                                    break;
+                                case "DepartmentName":
+                                    worksheet.Cells[row, i + 1].Value = entity.DepartmentName;
+                                    worksheet.Column(i + 1).Width = 40;
+                                    break;
+                                case "ApplyDate":
+                                    worksheet.Cells[row, i + 1].Value = entity.ApplyDate?.ToString("dd/MM/yyyy hh:mm");
+                                    worksheet.Cells[row, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "FromDate":
+                                    worksheet.Cells[row, i + 1].Value = entity.FromDate?.ToString("dd/MM/yyyy hh:mm");
+                                    worksheet.Cells[row, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "ToDate":
+                                    worksheet.Cells[row, i + 1].Value = entity.ToDate?.ToString("dd/MM/yyyy hh:mm");
+                                    worksheet.Cells[row, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "BreakTimeFrom":
+                                    worksheet.Cells[row, i + 1].Value = entity.BreakTimeFrom?.ToString("dd/MM/yyyy hh:mm");
+                                    worksheet.Cells[row, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "BreakTimeTo":
+                                    worksheet.Cells[row, i + 1].Value = entity.BreakTimeTo?.ToString("dd/MM/yyyy hh:mm");
+                                    worksheet.Cells[row, i + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "OverTimeInWorkingShift":
+                                    worksheet.Cells[row, i + 1].Value = entity.OverTimeInWorkingShift;
+                                    worksheet.Column(i + 1).Width = 20;
+                                    break;
+                                case "WorkingShift":
+                                    worksheet.Cells[row, i + 1].Value = entity.WorkingShift;
+                                    worksheet.Column(i + 1).Width = 20;
+                                    break;
+                                case "Reason":
+                                    worksheet.Cells[row, i + 1].Value = entity.Reason;
+                                    worksheet.Column(i + 1).Width = 20;
+                                    break;
+                                case "ApprovalName":
+                                    worksheet.Cells[row, i + 1].Value = entity.ApprovalName;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "RelationShipNames":
+                                    worksheet.Cells[row, i + 1].Value = entity.RelationShipNames;
+                                    worksheet.Column(i + 1).Width = 50;
+                                    break;
+                                case "Description":
+                                    worksheet.Cells[row, i + 1].Value = entity.Description;
+                                    worksheet.Column(i + 1).Width = 30;
+                                    break;
+                                case "StatusName":
+                                    worksheet.Cells[row, i + 1].Value = entity.StatusName;
+                                    worksheet.Column(i + 1).Width = 20;
+                                    break;
+                            }
+                        }
+
 
                         // Tạo border 1 trường dữ liệu
-                        var recordRow = worksheet.Cells["A" + start++ + ":Q" + end++];
+                        //var recordRow = worksheet.Cells["A" + start++ + ":Q" + end++];
+                        var recordRow = worksheet.Cells[listAlphabet[0] + start++ + ":"+ listAlphabet[listAlphabet.Length-1] + end++];
 
                         recordRow.Style.Font.Size = 12;
                         recordRow.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -412,5 +565,33 @@ namespace Demo.WebApplication.BL.OverTimeBL
             }
         }
         #endregion
+
+        #region Override
+        /// <summary>
+        /// Validate các dữ liệu đầu vào theo các rules validate của riêng class Employee
+        /// author: VietDV(27/3/2023)
+        /// </summary>
+        /// <param name="record">form body dữ liệu cần validate</param>
+        /// <param name="isInsert">cờ xác định xem có phải là API thêm mới không</param>
+        /// <returns>Danh sách các lỗi</returns>
+        public override List<ErrorResult> ValidateRecordCustom(OverTime record, bool isInsert)
+        {
+            var validateFailuresCustom = new List<ErrorResult>();
+            var result = _overTimeDL.CheckOverTimeDuplicate(record);
+            if(result.IsSuccess == false)
+            {
+                validateFailuresCustom.Add(new ErrorResult
+                {
+                    ErrorCode = ErrorCode.DuplicateOverTime,
+                    DevMsg = Resource.OverTime_Duplicate,
+                    UserMsg = Resource.OverTime_Duplicate
+                });
+            }
+
+            return validateFailuresCustom;
+        }
+
+        #endregion
+
     }
 }

@@ -54,5 +54,15 @@ namespace Demo.WebApplication.DL.OverTimeDL
         /// <param name="param">truy vấn lọc</param>
         /// <returns>Danh sách bản ghi thoả mãn</returns>
         public List<OverTime> ExcelExport(OverTimesExportDataParams param);
+
+        /// <summary>
+        /// Xuất khẩu dữ liệu đơn làm thêm được chọn
+        /// author: VietDV(5/5/2023)
+        /// </summary>
+        /// <param name="param">danh sách id các đơn được chọn</param>
+        /// <returns>Danh sách bản ghi thoả mãn</returns>
+        public List<OverTime> ExcelExportSelected(String IDs);
+
+        public ServiceResult CheckOverTimeDuplicate(OverTime record);
     }
 }

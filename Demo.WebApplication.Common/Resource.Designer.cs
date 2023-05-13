@@ -196,6 +196,15 @@ namespace Demo.WebApplication.Common {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đơn đăng ký làm thêm đã tồn tại. Vui lòng kiểm tra lại..
+        /// </summary>
+        public static string OverTime_Duplicate {
+            get {
+                return ResourceManager.GetString("OverTime_Duplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã nhân viên.
         /// </summary>
         public static string Overtime_EmployeeCode {

@@ -19,11 +19,13 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// ID nhân viên đăng ký làm thêm
         /// </summary>
+        [NotEmpty]
         public Guid? EmployeeId { get; set; }
 
         /// <summary>
         /// Mã nhân viên đăng ký làm thêm
         /// </summary>
+        [NotEmpty]
         public String? EmployeeCode { get; set; }
 
         /// <summary>
@@ -60,11 +62,13 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// Ngày nộp đơn
         /// </summary>
+        [NotEmpty]
         public DateTime? ApplyDate { get; set; }
 
         /// <summary>
         /// Làm thêm từ
         /// </summary>
+        [NotEmpty]
         public DateTime? FromDate { get; set; }
 
         /// <summary>
@@ -80,11 +84,13 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// Làm thêm đến
         /// </summary>
+        [NotEmpty]
         public DateTime? ToDate { get; set; }
 
         /// <summary>
         /// giá trị Thời điểm làm thêm (0:Trước ca, 1: Sau ca, 2: Nghỉ giữa ca, 3:Ngày nghỉ)
         /// </summary> 
+        [NotEmpty]
         public OverTimeInWorkingShift? OverTimeInWorkingShiftName { get; set; }
 
         /// <summary>
@@ -95,6 +101,7 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// Giá trị Ca áp dụng (0:Ca 1, 1: Ca 2, 2: Ca đêm, 3:Ca hành chính)
         /// </summary>
+        [NotEmpty]
         public WorkingShift? WorkingShiftName { get; set; }
 
         /// <summary>
@@ -105,6 +112,7 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// Lý do làm thêm
         /// </summary>
+        [NotEmpty]
         public String? Reason { get; set; }
 
         /// <summary>
@@ -115,6 +123,7 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// Id người duyệt
         /// </summary>
+        [NotEmpty]
         public Guid? ApprovalId { get; set; }
 
         /// <summary>
@@ -130,6 +139,7 @@ namespace Demo.WebApplication.Common.Entities
         /// <summary>
         /// giá trị trạng thái (0: tất cả 1: chờ duyệt, 2: Đã duyệt, 3: từ chối)
         /// </summary>
+        [NotEmpty]
         public Status? Status { get; set; }
 
         /// <summary>

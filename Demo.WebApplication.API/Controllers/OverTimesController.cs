@@ -33,7 +33,7 @@ namespace Demo.WebApplication.API.Controllers
         /// <param name="id">ID làm thêm muốn lấy</param>
         /// <returns>Đối tượng làm thêm</returns>
         [HttpGet("{id}")]
-        public IActionResult GetEmployeeById([FromRoute] Guid id)
+        public IActionResult GetOverTimeById([FromRoute] Guid id)
         {
             try
             {
@@ -250,25 +250,25 @@ namespace Demo.WebApplication.API.Controllers
         /// </summary>
         /// <param name="param">truy vấn lọc</param>
         /// <returns>Danh sách bản ghi thoả mãn</returns>
-        [HttpGet("Export")]
-        public IActionResult ExcelExport([FromQuery] OverTimesExportDataParams param)
+        [HttpPost("Export")]
+        public IActionResult ExcelExport([FromBody] ExportBody body)
         {
-            var stream = _overTimeBL.ExcelExport(param);
+            var stream = _overTimeBL.ExcelExport(body);
             string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
             return File(stream, "application/vnd.ms-excel", excelName);
         }
 
         /// <summary>
-        /// Xuất khẩu các dữ liệu làm thêm được chọn
-        /// author: VietDV(30/4/2023)
+        /// Xuất khẩu dữ liệu đơn làm thêm được chọn
+        /// author: VietDV(5/5/2023)
         /// </summary>
-        /// <param name="param">Danh sách các bản ghi</param>
-        /// <returns>File excel</returns>
-        [HttpGet("ExportSelected")]
-        public IActionResult ExcelExportSelected([FromBody] List<OverTime> listOverTimes)
+        /// <param name="param">danh sách id các đơn được chọn</param>
+        /// <returns>Danh sách bản ghi thoả mãn</returns>
+        [HttpPost("ExportSelected")]
+        public IActionResult ExcelExportSelected([FromBody] ExportDataSelectedParams IDs)
         {
-            var stream = _overTimeBL.ExcelExportSelected(listOverTimes);
+            var stream = _overTimeBL.ExcelExportSelected(IDs.listID, IDs.header);
             string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
 
             return File(stream, "application/vnd.ms-excel", excelName);

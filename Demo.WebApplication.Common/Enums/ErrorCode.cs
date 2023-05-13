@@ -40,6 +40,11 @@
         /// <summary>
         /// SQL bắt exception
         /// </summary>
-        SqlCatchException = 8
+        SqlCatchException = 8,
+
+        /// <summary>
+        /// trùng đơn
+        /// </summary>
+        DuplicateOverTime = 9,
     }
 }
